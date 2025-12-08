@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>KT플라자 유성직영점</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 상단 고정바 -->
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <span class="shop-name-line1">KT플라자</span><br>
+      <span class="shop-name-line2">유성직영점</span>
+    </div>
+    <div class="top-bar-right">
+      <a href="tel:01034391816" class="btn primary-btn small">
+        전화예약
+      </a>
+    </div>
+  </header>
+
+  <!-- 전체 컨테이너 -->
+  <main class="page-container">
+
+    <!-- 탭 버튼 -->
+    <nav class="tab-nav" aria-label="메인 메뉴">
+      <button class="tab-btn active" data-tab="tab-products">상품/혜택 소개</button>
+      <button class="tab-btn" data-tab="tab-staff">상담사 소개</button>
+      <button class="tab-btn" data-tab="tab-contact">상담신청&연락</button>
+    </nav>
+
+    <!-- 탭 콘텐츠 영역 -->
+    <section id="tab-products" class="tab-content active" aria-label="상품/혜택 소개">
+      <!-- 이 달의 소식 -->
+      <section class="section-block">
+        <h2 class="section-title">이 달의 소식</h2>
+        <p class="section-subtitle">
+          이번 달 프로모션/신제품 소식을 영상으로 확인해 보세요.
+        </p>
+        <div class="video-wrapper">
+          <!-- 유튜브 등 영상 링크로 src만 교체해서 사용하세요 -->
+          <iframe
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            title="이 달의 소식"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </section>
+
+      <!-- 판매 제품 소개 (캐러셀) -->
+      <section class="section-block">
+        <h2 class="section-title">판매 제품 소개</h2>
+        <p class="section-subtitle">
+          인기 상품을 좌우로 넘기며 살펴보세요. 카드 클릭 시 네이버 블로그로 이동합니다.
+        </p>
+
+        <div class="carousel">
+          <button class="carousel-arrow prev" aria-label="이전 상품">&lt;</button>
+
+          <div class="carousel-window">
+            <!-- 각 상품 카드는 링크 전체를 클릭 가능하게 -->
+            <a href="https://www.naver.com"
+               target="_blank"
+               class="product-card active"
+               data-index="0">
+              <div class="product-thumbnail placeholder-thumb">
+                썸네일1
+              </div>
+              <div class="product-info">
+                <h3 class="product-title">[예시] 갤럭시 폴더블7 리뷰&혜택 안내</h3>
+              </div>
+            </a>
+
+            <a href="https://www.naver.com"
+               target="_blank"
+               class="product-card"
+               data-index="1">
+              <div class="product-thumbnail placeholder-thumb">
+                썸네일2
+              </div>
+              <div class="product-info">
+                <h3 class="product-title">[예시] 아이폰17 시리즈 최저가 개통 팁</h3>
+              </div>
+            </a>
+
+            <a href="https://www.naver.com"
+               target="_blank"
+               class="product-card"
+               data-index="2">
+              <div class="product-thumbnail placeholder-thumb">
+                썸네일3
+              </div>
+              <div class="product-info">
+                <h3 class="product-title">[예시] 인터넷·TV 결합 시 절약 금액 정리</h3>
+              </div>
+            </a>
+          </div>
+
+          <button class="carousel-arrow next" aria-label="다음 상품">&gt;</button>
+        </div>
+
+        <div class="carousel-dots" aria-label="상품 선택">
+          <button class="dot active" data-index="0"></button>
+          <button class="dot" data-index="1"></button>
+          <button class="dot" data-index="2"></button>
+        </div>
+      </section>
+    </section>
+
+    <!-- Tap 2. 상담사 소개 -->
+    <section id="tab-staff" class="tab-content" aria-label="상담사 소개">
+      <!-- 점장님 소개 -->
+      <section class="section-block">
+        <h2 class="section-title">우리 점장님을 소개합니다!</h2>
+        <p class="section-subtitle">
+          유성직영점을 책임지는 점장님의 프로필입니다.
+        </p>
+
+        <a href="https://www.naver.com"
+           target="_blank"
+           class="staff-card large-card">
+          <div class="staff-avatar">
+            <!-- 실제 사진 파일로 교체: 예) img/kim-suhyun.jpg -->
+            <div class="avatar-circle">김</div>
+          </div>
+          <div class="staff-info">
+            <h3 class="staff-name">김수현 점장</h3>
+            <p class="staff-role">유성직영점 점장</p>
+            <p class="staff-desc">
+              고객 상황에 딱 맞는 요금제와 혜택을 찾아드리는
+              맞춤형 컨설턴트입니다.
+            </p>
+            <span class="staff-link-text">자세한 프로필 보기 →</span>
+          </div>
+        </a>
+      </section>
+
+      <!-- 매니저 소개 -->
+      <section class="section-block">
+        <h2 class="section-title">자랑스러운 우리 매니저님들을 소개합니다!</h2>
+        <p class="section-subtitle">
+          유성직영점의 든든한 상담 파트너들입니다.
+        </p>
+
+        <div class="staff-grid">
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="staff-card">
+            <div class="staff-avatar">
+              <div class="avatar-circle">김</div>
+            </div>
+            <div class="staff-info">
+              <h3 class="staff-name">김승원 매니저</h3>
+              <p class="staff-desc">
+                휴대폰·인터넷 결합으로 통신비 절감 솔루션을 제안합니다.
+              </p>
+              <span class="staff-link-text">프로필 보기</span>
+            </div>
+          </a>
+
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="staff-card">
+            <div class="staff-avatar">
+              <div class="avatar-circle">윤</div>
+            </div>
+            <div class="staff-info">
+              <h3 class="staff-name">윤기석 매니저</h3>
+              <p class="staff-desc">
+                복잡한 요금제도 쉽게! 이해 돕는 친절 설명이 장점입니다.
+              </p>
+              <span class="staff-link-text">프로필 보기</span>
+            </div>
+          </a>
+
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="staff-card">
+            <div class="staff-avatar">
+              <div class="avatar-circle">이</div>
+            </div>
+            <div class="staff-info">
+              <h3 class="staff-name">이병훈 매니저</h3>
+              <p class="staff-desc">
+                기기 변경, 데이터 이전까지 한 번에 돕는 실속 전문가입니다.
+              </p>
+              <span class="staff-link-text">프로필 보기</span>
+            </div>
+          </a>
+
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="staff-card">
+            <div class="staff-avatar">
+              <div class="avatar-circle">이</div>
+            </div>
+            <div class="staff-info">
+              <h3 class="staff-name">이호준 매니저</h3>
+              <p class="staff-desc">
+                집·회사 인터넷망 구성까지 꼼꼼히 챙기는 네트워크 담당입니다.
+              </p>
+              <span class="staff-link-text">프로필 보기</span>
+            </div>
+          </a>
+
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="staff-card">
+            <div class="staff-avatar">
+              <div class="avatar-circle">임</div>
+            </div>
+            <div class="staff-info">
+              <h3 class="staff-name">임다은 매니저</h3>
+              <p class="staff-desc">
+                어르신·초보자도 안심할 수 있는 1:1 맞춤 사용 설명이 강점입니다.
+              </p>
+              <span class="staff-link-text">프로필 보기</span>
+            </div>
+          </a>
+        </div>
+      </section>
+    </section>
+
+    <!-- Tap 3. 상담신청&연락 -->
+    <section id="tab-contact" class="tab-content" aria-label="상담신청&연락">
+      <!-- 네이버 예약 -->
+      <section class="section-block">
+        <h2 class="section-title">네이버 예약</h2>
+        <p class="section-subtitle">
+          상담받고 싶은 담당자를 선택해 원하는 시간으로 예약해 주세요.
+        </p>
+
+        <div class="reserve-grid">
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="reserve-card">
+            <h3 class="reserve-name">김수현 점장</h3>
+            <p class="reserve-desc">전 상품 통합 상담</p>
+            <span class="reserve-link">네이버 예약 바로가기 →</span>
+          </a>
+
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="reserve-card">
+            <h3 class="reserve-name">김승원 매니저</h3>
+            <p class="reserve-desc">휴대폰/인터넷 결합 상담</p>
+            <span class="reserve-link">네이버 예약 바로가기 →</span>
+          </a>
+
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="reserve-card">
+            <h3 class="reserve-name">윤기석 매니저</h3>
+            <p class="reserve-desc">요금제/혜택 비교 상담</p>
+            <span class="reserve-link">네이버 예약 바로가기 →</span>
+          </a>
+
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="reserve-card">
+            <h3 class="reserve-name">이병훈 매니저</h3>
+            <p class="reserve-desc">기기 변경/데이터 이전</p>
+            <span class="reserve-link">네이버 예약 바로가기 →</span>
+          </a>
+
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="reserve-card">
+            <h3 class="reserve-name">이호준 매니저</h3>
+            <p class="reserve-desc">인터넷·TV 설치/이전</p>
+            <span class="reserve-link">네이버 예약 바로가기 →</span>
+          </a>
+
+          <a href="https://www.naver.com"
+             target="_blank"
+             class="reserve-card">
+            <h3 class="reserve-name">임다은 매니저</h3>
+            <p class="reserve-desc">초보자/어르신 맞춤 상담</p>
+            <span class="reserve-link">네이버 예약 바로가기 →</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 매장 전화연락 -->
+      <section class="section-block">
+        <h2 class="section-title">매장 전화연락</h2>
+        <p class="section-subtitle">
+          간단 문의는 전화로 바로 확인해 주세요.
+        </p>
+        <a href="tel:01093880429" class="btn primary-btn wide">
+          010-9388-0429 로 전화하기
+        </a>
+      </section>
+
+      <!-- 네이버 블로그 -->
+      <section class="section-block">
+        <h2 class="section-title">네이버 블로그 방문</h2>
+        <p class="section-subtitle">
+          실시간 후기와 자세한 이벤트 안내는 블로그에서 확인하실 수 있어요.
+        </p>
+        <a href="https://www.naver.com"
+           target="_blank"
+           class="btn secondary-btn wide">
+          매장 블로그 바로가기
+        </a>
+      </section>
+
+      <!-- 단골 등록 -->
+      <section class="section-block">
+        <h2 class="section-title">우리 매장의 단골, 안하실래요?</h2>
+        <p class="section-subtitle">
+          단골 등록해 두시면 신규 혜택과 이벤트 소식을 가장 먼저 받아보실 수 있습니다.
+        </p>
+        <a href="https://www.naver.com"
+           target="_blank"
+           class="btn accent-btn wide">
+          단골 등록하러 가기
+        </a>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
