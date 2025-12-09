@@ -332,8 +332,8 @@ body {
 }
 
 .avatar-circle {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border-radius: 999px;
   background: radial-gradient(circle at 30% 20%, #ffffff, #a8e6a8);
   display: flex;
@@ -351,14 +351,14 @@ body {
 
 .staff-name {
   margin: 0;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: #163b23;
 }
 
 .staff-role {
   margin: 0;
-  font-size: 12px;
+  font-size: 13px;
   color: #4f7258;
 }
 
