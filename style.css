@@ -332,15 +332,15 @@ body {
 }
 
 .profile-photo {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .avatar-circle {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   border-radius: 999px;
   background: radial-gradient(circle at 30% 20%, #ffffff, #a8e6a8);
   display: flex;
