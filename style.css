@@ -329,7 +329,7 @@ body {
   align-items: center;
   width: 80%;
   padding: 14px;
-  margin-bottom: 12px;
+  margin: 0 auto 12px;  /* ⬅ 여기만 바꿔주면 됨! */
   background: #f7fff9;
   border: 1px solid #d8f0d8;
   border-radius: 16px;
