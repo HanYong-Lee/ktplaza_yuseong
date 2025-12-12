@@ -210,6 +210,23 @@ body {
   color: #4b7057;
 }
 
+/* 단체사진 영역 */
+.group-photo-wrapper {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.group-photo {
+  width: 100%;
+  max-width: 360px; /* 모바일 기준 최적 사이즈 */
+  border-radius: 14px;
+  border: 1px solid #d6edd6;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+
 /* 영상 영역 */
 .video-wrapper {
   position: relative;
