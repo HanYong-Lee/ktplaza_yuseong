@@ -51,6 +51,28 @@ body {
   padding: 8px 10px;
 }
 
+.call-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  gap: 6px; /* 아이콘과 텍스트 간격 */
+}
+
+.call-btn .icon {
+  font-size: 18px; /* 아이콘 크기 */
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.call-btn .text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
 /* 버튼 공통 스타일 */
 .btn {
   display: inline-flex;
