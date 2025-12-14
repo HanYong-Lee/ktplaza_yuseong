@@ -24,9 +24,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(227, 249, 227, 0.96);
-  backdrop-filter: blur(6px);
-  border-bottom: 1px solid #c4e9c4;
+
+  background: rgba(243, 255, 243, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  border-bottom: 2px solid rgba(37, 162, 90, 0.75);
+  box-shadow:
+    0 6px 14px rgba(27, 102, 60, 0.18),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+
   z-index: 1000;
 }
 
@@ -191,10 +198,18 @@ body {
 .section-block {
   margin-bottom: 24px;
   padding: 16px 14px 18px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(32, 96, 48, 0.06);
-  border: 1px solid rgba(196, 233, 196, 0.7);
+  border: 1px solid rgba(196, 233, 196, 0.9);
+
+  /* 입체감 업 */
+  box-shadow: 0 8px 18px rgba(20, 80, 40, 0.16);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.section-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(20, 80, 40, 0.22);
 }
 
 .section-title {
@@ -261,17 +276,27 @@ body {
 }
 
 .product-card {
-  position: relative;          /* absolute 제거 */
-  inset: auto;                 /* 혹시 남아있다면 무효화 */
-  display: flex;               /* 항상 보이게 */
+  position: relative;
+  inset: auto;
+  display: flex;
   flex-direction: row;
   gap: 10px;
-  padding: 10px;
+  padding: 10px 12px;
   background: #f7fff7;
   border-radius: 14px;
   border: 1px solid #d6edd6;
+
   text-decoration: none;
   color: inherit;
+
+  box-shadow: 0 5px 14px rgba(26, 90, 48, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  background: #f1fff4;
+  box-shadow: 0 10px 24px rgba(26, 90, 48, 0.22);
 }
 
 .product-card.active {
@@ -316,12 +341,21 @@ body {
 .staff-card {
   display: flex;
   gap: 10px;
-  padding: 10px;
+  padding: 10px 12px;
   border-radius: 14px;
   background: #f7fff9;
   border: 1px solid #d8f0d8;
   text-decoration: none;
   color: inherit;
+
+  box-shadow: 0 5px 14px rgba(26, 90, 48, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.staff-card:hover {
+  transform: translateY(-2px);
+  background: #f2fff7;
+  box-shadow: 0 10px 24px rgba(26, 90, 48, 0.22);
 }
 
 .large-card {
@@ -329,13 +363,22 @@ body {
   align-items: center;
   width: 80%;
   padding: 14px;
-  margin: 0 auto 12px;  /* ⬅ 여기만 바꿔주면 됨! */
+  margin: 0 auto 12px;
   background: #f7fff9;
   border: 1px solid #d8f0d8;
   border-radius: 16px;
   text-decoration: none;
   color: inherit;
   gap: 12px;
+
+  box-shadow: 0 6px 16px rgba(26, 90, 48, 0.14);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.large-card:hover {
+  transform: translateY(-3px);
+  background: #f0fff6;
+  box-shadow: 0 12px 26px rgba(26, 90, 48, 0.24);
 }
 
 .staff-avatar {
@@ -400,12 +443,21 @@ body {
 }
 
 .reserve-card {
-  padding: 10px;
+  padding: 10px 12px;
   border-radius: 14px;
   background: #f5fff6;
   border: 1px solid #d1eed1;
   text-decoration: none;
   color: inherit;
+
+  box-shadow: 0 4px 10px rgba(26, 90, 48, 0.1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.reserve-card:hover {
+  transform: translateY(-2px);
+  background: #effff3;
+  box-shadow: 0 10px 22px rgba(26, 90, 48, 0.2);
 }
 
 .reserve-name {
