@@ -46,23 +46,34 @@ body {
 .top-bar {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 8px;
+  right: 8px;
   height: 64px;
-  padding: 8px 16px;
+  margin-top: 6px;
+  padding: 8px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(
-      120deg,
-      rgba(220, 245, 225, 0.98),
-      rgba(233, 249, 233, 0.96)
-    );
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid #c4e9c4;
-  box-shadow: 0 4px 12px rgba(25, 83, 46, 0.08);
+
+  background: linear-gradient(135deg, #ff5b72, #ff8a9f);
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 24px rgba(255, 96, 120, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.6); /* 얇은 하얀 외곽선 */
+
+  color: #fff;
   z-index: 1000;
 }
+
+/* 글자 컬러를 상단 바에 맞게 화이트 계열로 */
+.shop-name-line1 {
+  color: rgba(255, 255, 255, 0.9);
+}
+.shop-name-line2 {
+  color: #ffffff;
+}
+
 
 .top-bar-left {
   line-height: 1.15;
