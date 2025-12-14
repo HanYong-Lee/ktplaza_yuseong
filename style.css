@@ -1,28 +1,4 @@
-/* ============ 공통 컬러 토큰: Red Soft Theme ============ */
-:root {
-  --color-bg-top: #ffeef1;
-  --color-bg-middle: #ffffff;
-  --color-bg-bottom: #fff6f7;
-
-  --color-text-main: #4a1f1f;
-  --color-text-soft: #7a4b4b;
-
-  --color-accent: #ff5b72;          /* 메인 포인트 레드핑크 */
-  --color-accent-dark: #e7435c;     /* hover 색 */
-
-  --color-card-bg: rgba(255, 255, 255, 0.95);
-  --color-card-border: rgba(255, 180, 190, 0.55);
-
-  /* 그림자를 좀 더 강하게 */
-  --shadow-soft: 0 6px 18px rgba(255, 96, 120, 0.18);
-  --shadow-strong: 0 10px 24px rgba(255, 96, 120, 0.25);
-
-  --radius-card: 18px;
-  --radius-pill: 999px;
-  --transition-fast: 0.15s ease;
-}
-
-/* ============ 기본 설정 ============ */
+/* 기본 설정 */
 *,
 *::before,
 *::after {
@@ -33,73 +9,48 @@ body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  background: linear-gradient(
-    180deg,
-    var(--color-bg-top) 0%,
-    var(--color-bg-middle) 55%,
-    var(--color-bg-bottom) 100%
-  );
-  color: var(--color-text-main);
+  background: linear-gradient(180deg, #f3fff3 0%, #ffffff 60%, #f5fff8 100%);
+  color: #113322;
 }
 
-/* ============ 상단 고정바 ============ */
+/* 상단 고정바 */
 .top-bar {
   position: fixed;
   top: 0;
-  left: 8px;
-  right: 8px;
+  left: 0;
+  right: 0;
   height: 64px;
-  margin-top: 6px;
-  padding: 8px 18px;
+  padding: 8px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  background: linear-gradient(135deg, #ff5b72, #ff8a9f);
-  border-radius: 18px;
-
-  box-shadow:
-    0 10px 24px rgba(255, 96, 120, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.6); /* 얇은 하얀 외곽선 */
-
-  color: #fff;
+  background: rgba(227, 249, 227, 0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid #c4e9c4;
   z-index: 1000;
 }
 
-/* 글자 컬러를 상단 바에 맞게 화이트 계열로 */
-.shop-name-line1 {
-  color: rgba(255, 255, 255, 0.9);
-}
-.shop-name-line2 {
-  color: #ffffff;
-}
-
-
 .top-bar-left {
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
 .shop-name-line1 {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  color: #1b703e;
-  text-transform: uppercase;
+  color: #116633;
 }
 
 .shop-name-line2 {
-  font-size: 17px;
-  font-weight: 800;
+  font-size: 16px;
+  font-weight: 700;
   color: #0c4b2a;
 }
 
-/* 상단 오른쪽 버튼(점장 연락) */
 .top-bar-right .small {
-  font-size: 12px;
-  padding: 6px 12px;
+  font-size: 13px;
+  padding: 8px 10px;
 }
 
-/* 전화 아이콘 + 텍스트 버튼 */
 .call-btn {
   display: flex !important;
   flex-direction: row !important;
@@ -123,28 +74,20 @@ body {
   line-height: 1.1;
 }
 
-/* ============ 버튼 공통 스타일 ============ */
+/* 버튼 공통 스타일 */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 16px;
-  border-radius: var(--radius-pill);
+  padding: 10px 14px;
+  border-radius: 999px;
   border: none;
   font-weight: 600;
   font-size: 14px;
   text-decoration: none;
   cursor: pointer;
-  transition:
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast),
-    background var(--transition-fast),
-    color var(--transition-fast);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
   white-space: nowrap;
-}
-
-.btn:hover {
-  transform: translateY(-1px);
 }
 
 .btn:active {
@@ -155,12 +98,12 @@ body {
 .btn.small {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  line-height: 1.2;
+  align-items: center;   /* 가로 방향 중앙 */
+  justify-content: center; /* 세로 방향 중앙 */
+  text-align: center;    /* 텍스트 자체 가운데 */
+  line-height: 1.2;      /* 줄간격 정리 */
   font-size: 12px;
-  padding: 6px 10px;
+  padding: 6px 10px;     /* 버튼 높이 조절 */
 }
 
 .btn.wide {
@@ -169,57 +112,56 @@ body {
 
 /* 버튼 색상 */
 .primary-btn {
-  background: linear-gradient(135deg, #25a25a, #2fbd6b);
+  background: #25a25a;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(37, 162, 90, 0.25);
+  box-shadow: 0 4px 10px rgba(37, 162, 90, 0.2);
 }
 
 .primary-btn:hover {
-  background: linear-gradient(135deg, #1f8a4c, #29a85f);
+  background: #1f8a4c;
 }
 
 .secondary-btn {
-  background: linear-gradient(135deg, #e6f7f2, #f3fffb);
+  background: #e6f7f2;
   color: #116655;
   border: 1px solid #b8e1d6;
 }
 
 .secondary-btn:hover {
-  background: linear-gradient(135deg, #ddf3ec, #f0fffa);
+  background: #d7f0ea;
 }
 
 .accent-btn {
-  background: linear-gradient(135deg, #f7ffe0, #fdffe9);
-  color: #757f00;
+  background: #f7ffe0;
+  color: #7b8a00;
   border: 1px solid #e3f0a3;
 }
 
 .accent-btn:hover {
-  background: linear-gradient(135deg, #f2ffd1, #fbffe2);
+  background: #f1ffd1;
 }
 
-/* ============ 메인 레이아웃 ============ */
+/* 메인 레이아웃 */
 .page-container {
-  padding: 80px 16px 24px;
+  padding: 80px 14px 24px;
   max-width: 720px;
   margin: 0 auto;
 }
 
-/* ============ 탭 네비게이션 ============ */
+/* 탭 네비게이션 */
 .tab-nav {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 6px;
   padding: 4px;
-  background: rgba(233, 249, 233, 0.98);
-  border-radius: var(--radius-pill);
+  background: #e9f9e9;
+  border-radius: 999px;
   border: 1px solid #cceacd;
-  margin-bottom: 18px;
-  box-shadow: 0 4px 12px rgba(27, 86, 46, 0.05);
+  margin-bottom: 16px;
 }
 
 .tab-btn {
-  border-radius: var(--radius-pill);
+  border-radius: 999px;
   border: none;
   padding: 8px 6px;
   font-size: 13px;
@@ -227,25 +169,16 @@ body {
   background: transparent;
   color: #336644;
   cursor: pointer;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast),
-    box-shadow var(--transition-fast),
-    transform var(--transition-fast);
-}
-
-.tab-btn:hover {
-  background: rgba(214, 240, 214, 0.8);
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #25a25a, #2fbd6b);
+  background: #25a25a;
   color: #ffffff;
-  box-shadow: 0 3px 10px rgba(37, 162, 90, 0.3);
-  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(37, 162, 90, 0.25);
 }
 
-/* ============ 탭 콘텐츠 ============ */
+/* 탭 콘텐츠 */
 .tab-content {
   display: none;
 }
@@ -254,31 +187,30 @@ body {
   display: block;
 }
 
-/* ============ 섹션 공통 ============ */
+/* 섹션 공통 */
 .section-block {
   margin-bottom: 24px;
-  padding: 16px 16px 20px;
-  background: var(--color-card-bg);
-  border-radius: var(--radius-card);
-  box-shadow: var(--color-card-shadow);
-  border: 1px solid var(--color-card-border);
-  backdrop-filter: blur(6px);
+  padding: 16px 14px 18px;
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(32, 96, 48, 0.06);
+  border: 1px solid rgba(196, 233, 196, 0.7);
 }
 
 .section-title {
   margin: 0 0 6px;
   font-size: 16px;
-  font-weight: 750;
+  font-weight: 700;
   color: #184a2b;
 }
 
 .section-subtitle {
   margin: 0 0 12px;
   font-size: 13px;
-  color: var(--color-text-soft);
+  color: #4b7057;
 }
 
-/* ============ 단체사진 영역 ============ */
+/* 단체사진 영역 */
 .group-photo-wrapper {
   width: 100%;
   margin-top: 10px;
@@ -288,22 +220,21 @@ body {
 
 .group-photo {
   width: 100%;
-  max-width: 360px;
-  border-radius: 16px;
+  max-width: 360px; /* 모바일 기준 최적 사이즈 */
+  border-radius: 14px;
   border: 1px solid #d6edd6;
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
-  object-fit: cover;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
-/* ============ 영상 영역 ============ */
+
+/* 영상 영역 */
 .video-wrapper {
   position: relative;
   width: 100%;
   padding-top: 56.25%; /* 16:9 */
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
   background: #dff5e0;
-  box-shadow: 0 5px 12px rgba(33, 96, 56, 0.12);
 }
 
 .video-wrapper iframe {
@@ -314,48 +245,43 @@ body {
   border: none;
 }
 
-/* ============ 제품소개(세로 리스트) ============ */
+/* 제품소개 영역역 */
+
 .product-head {
   margin: 0 0 4px;
   font-size: 12px;
   font-weight: 600;
-  color: #2b7a4b;
+  color: #2b7a4b;  /* 연두 느낌의 포인트 컬러 */
 }
 
 .product-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 10px; /* 카드 사이 간격 */
 }
 
 .product-card {
-  position: relative;
-  inset: auto;
-  display: flex;
+  position: relative;          /* absolute 제거 */
+  inset: auto;                 /* 혹시 남아있다면 무효화 */
+  display: flex;               /* 항상 보이게 */
   flex-direction: row;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 10px;
   background: #f7fff7;
-  border-radius: 16px;
+  border-radius: 14px;
   border: 1px solid #d6edd6;
   text-decoration: none;
   color: inherit;
-  transition:
-    box-shadow var(--transition-fast),
-    transform var(--transition-fast),
-    background var(--transition-fast);
 }
 
-.product-card:hover {
-  background: #f2fff5;
-  box-shadow: 0 4px 10px rgba(40, 115, 67, 0.12);
-  transform: translateY(-1px);
+.product-card.active {
+  display: flex;
 }
 
 .product-thumbnail {
   width: 80px;
   height: 80px;
-  border-radius: 14px;
+  border-radius: 12px;
   background-size: cover;
   background-position: center;
   flex-shrink: 0;
@@ -383,37 +309,30 @@ body {
   color: #1b4b2b;
 }
 
-/* ============ 상담사 카드 ============ */
+
+/* 상담사 카드 */
+
+
 .staff-card {
   display: flex;
   gap: 10px;
-  padding: 10px 12px;
-  border-radius: 16px;
+  padding: 10px;
+  border-radius: 14px;
   background: #f7fff9;
   border: 1px solid #d8f0d8;
   text-decoration: none;
   color: inherit;
-  transition:
-    box-shadow var(--transition-fast),
-    transform var(--transition-fast),
-    background var(--transition-fast);
-}
-
-.staff-card:hover {
-  background: #f0fff7;
-  box-shadow: 0 4px 10px rgba(38, 110, 60, 0.12);
-  transform: translateY(-1px);
 }
 
 .large-card {
   display: flex;
   align-items: center;
-  width: 82%;
+  width: 80%;
   padding: 14px;
-  margin: 0 auto 12px;
+  margin: 0 auto 12px;  /* ⬅ 여기만 바꿔주면 됨! */
   background: #f7fff9;
   border: 1px solid #d8f0d8;
-  border-radius: 18px;
+  border-radius: 16px;
   text-decoration: none;
   color: inherit;
   gap: 12px;
@@ -473,7 +392,7 @@ body {
   color: #1f8a4c;
 }
 
-/* ============ 네이버 예약 카드 ============ */
+/* 네이버 예약 카드 */
 .reserve-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -481,22 +400,12 @@ body {
 }
 
 .reserve-card {
-  padding: 10px 10px 11px;
-  border-radius: 16px;
+  padding: 10px;
+  border-radius: 14px;
   background: #f5fff6;
   border: 1px solid #d1eed1;
   text-decoration: none;
   color: inherit;
-  transition:
-    box-shadow var(--transition-fast),
-    transform var(--transition-fast),
-    background var(--transition-fast);
-}
-
-.reserve-card:hover {
-  background: #f0fff3;
-  box-shadow: 0 4px 10px rgba(33, 96, 56, 0.12);
-  transform: translateY(-1px);
 }
 
 .reserve-name {
@@ -517,23 +426,20 @@ body {
   color: #1f8a4c;
 }
 
-/* ============ 반응형 보정 ============ */
+/* 반응형 보정 */
 @media (max-width: 420px) {
+  .staff-grid,
   .reserve-grid {
     grid-template-columns: 1fr 1fr;
   }
 
   .page-container {
-    padding-inline: 12px;
-  }
-
-  .large-card {
-    width: 100%;
+    padding-inline: 10px;
   }
 }
 
 @media (min-width: 721px) {
   .page-container {
-    padding-top: 92px;
+    padding-top: 90px;
   }
 }
