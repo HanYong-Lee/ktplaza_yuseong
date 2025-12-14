@@ -17,6 +17,65 @@
   <meta name="apple-mobile-web-app-title" content="KT플라자 유성점">
 </head>
 
+<!-- 이벤트 팝업 - 퀴즈 -->
+<div id="event-popup" class="popup-backdrop hidden">
+  <div class="popup-card">
+    <button class="popup-close" data-popup-close="event-popup">✕</button>
+
+    <!-- 1) 이벤트 이미지 (마케터가 만든 한 장짜리 설명 이미지) -->
+    <div class="popup-image-wrapper">
+      <!-- 여기 src만 교체해서 사용 -->
+      <img src="event-image-01.png" alt="이벤트 안내 이미지" class="popup-image">
+    </div>
+
+    <!-- 2) 객관식 퀴즈 -->
+    <div class="popup-content">
+      <p class="popup-question">
+        Q. 이번 반짝 이벤트의 진행 기간은 언제까지일까요?
+      </p>
+
+      <div class="popup-options">
+        <label class="popup-option">
+          <input type="radio" name="event-answer" value="A">
+          <span>① 이번 주 일요일까지</span>
+        </label>
+        <label class="popup-option">
+          <input type="radio" name="event-answer" value="B">
+          <span>② 이번 달 말일까지</span>
+        </label>
+        <label class="popup-option">
+          <input type="radio" name="event-answer" value="C">
+          <span>③ 내년 설 연휴까지</span>
+        </label>
+      </div>
+
+      <button id="event-submit-btn" class="btn primary-btn wide popup-submit">
+        정답 제출하고 행운 번호 받기
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 정답 팝업 -->
+<div id="event-correct-popup" class="popup-backdrop hidden">
+  <div class="popup-card">
+    <button class="popup-close" data-popup-close="event-correct-popup">✕</button>
+
+    <div class="popup-content">
+      <p class="popup-title">🎉 정답입니다!</p>
+      <p class="popup-text">
+        매장 방문 시 본 팝업 화면을 직원에게 보여주세요.
+      </p>
+
+      <button class="btn secondary-btn wide" data-popup-close="event-correct-popup">
+        확인했어요
+      </button>
+    </div>
+  </div>
+</div>
+
+
+  
 <body>
 
   <!-- 상단 고정바 -->
