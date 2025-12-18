@@ -242,19 +242,16 @@ body {
 }
 
 
-/* 영상 영역 */
+/* 영상 영역  */
 .video-wrapper {
-  position: relative;
   width: 100%;
-  padding-top: 166.66%; /* 16:9 */
+  aspect-ratio: 9 / 16;   /* 🔥 핵심 */
   border-radius: 14px;
   overflow: hidden;
   background: #dff5e0;
 }
 
 .video-wrapper iframe {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
   border: none;
