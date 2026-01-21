@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>KT플라자 유성직영점</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0B1B3B" />
+  <title>KT플라자 만남로점 | 통합 안내</title>
+  <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="style.css">
-
   <!-- PWA manifest & icons -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/kt-icon-192.png">
@@ -14,421 +14,471 @@
   <meta name="theme-color" content="#25a25a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="KT플라자 유성점">
+  <meta name="apple-mobile-web-app-title" content="KT플라자 만남로점">
 </head>
 
-<!-- 이벤트 팝업 - 퀴즈 -->
-<div id="event-popup" class="popup-backdrop hidden">
-  <div class="popup-card">
-    <button class="popup-close" data-popup-close="event-popup">✕</button>
 
-    <!-- 1) 이벤트 이미지 (마케터가 만든 한 장짜리 설명 이미지) -->
-    <div class="popup-image-wrapper">
-      <!-- 여기 src만 교체해서 사용 -->
-      <img src="event-image-01.png" alt="이벤트 안내 이미지" class="popup-image">
-    </div>
-
-    <!-- 2) 객관식 퀴즈 -->
-    <div class="popup-content">
-      <p class="popup-question">
-        Q. 바쁘신 고객을 위한, 유성점의 맞춤 서비스는 무엇일까요?
-      </p>
-
-      <div class="popup-options">
-        <label class="popup-option">
-          <input type="radio" name="event-answer" value="A">
-          <span>① 빠른 전화받기 서비스</span>
-        </label>
-        <label class="popup-option">
-          <input type="radio" name="event-answer" value="B">
-          <span>② 방문판매 서비스</span>
-        </label>
-        <label class="popup-option">
-          <input type="radio" name="event-answer" value="C">
-          <span>③ 공휴일 매장운영 서비스</span>
-        </label>
-      </div>
-
-      <button id="event-submit-btn" class="btn primary-btn wide popup-submit">
-        정답 제출하고 행운 번호 받기
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- 정답 팝업 -->
-<div id="event-correct-popup" class="popup-backdrop hidden">
-  <div class="popup-card">
-    <button class="popup-close" data-popup-close="event-correct-popup">✕</button>
-
-    <div class="popup-content">
-      <p class="popup-title">🎉 정답입니다!</p>
-      <p class="popup-text">
-        매장 방문 시 본 팝업 화면을 직원에게 보여주세요.<br>본 팝업은 1회만 노출되니 지금 바로 캡쳐해주세요!
-      </p>
-
-      <button class="btn secondary-btn wide" data-popup-close="event-correct-popup">
-        확인했어요
-      </button>
-    </div>
-  </div>
-</div>
-
-
-  
 <body>
+  <!-- Intro Overlay (tap to skip) -->
+  <div id="intro" class="intro" role="dialog" aria-label="인트로 영상" aria-modal="true">
+    <video id="introVideo" class="intro__video" playsinline muted autoplay preload="auto">
+      <!-- 업로드 후 src만 유지 -->
+      <source src="assets/intro.mp4" type="video/mp4" />
+    </video>
 
-  <!-- 상단 고정바 -->
-  <header class="top-bar">
-    <div class="top-bar-left">
-      <span class="shop-name-line1">KT PLAZA</span><br>
-      <span class="shop-name-line2">유성직영점</span>
+    <div class="intro__hint">
+      <span class="pill">화면을 탭하면 스킵</span>
     </div>
 
-    <div class="top-bar-right">
-      <a href="tel:01034391816" class="btn primary-btn small call-btn">
-        <span class="icon">📞</span>
-        <span class="text">
-          불편사항 문의<br>(점장 연락)
-        </span>
-      </a>
+    <button id="skipBtn" class="intro__skip" type="button" aria-label="인트로 스킵">
+      스킵
+    </button>
+  </div>
+
+  <!-- Top Fixed Bar -->
+  <header class="topbar">
+    <div class="topbar__title">
+      <div class="brand">KT플라자</div>
+      <div class="branch">만남로직영점</div>
     </div>
+
+    <a class="topbar__cta" data-cta="call_store" data-card="topbar" href="tel:010-3232-2007" aria-label="불편사항 문의 점장 전화">
+      <span class="icon" aria-hidden="true">
+        <!-- Phone SVG -->
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+          <path d="M8.5 3.5l2 4.7-1.6 1.4c1.2 2.3 3.1 4.2 5.4 5.4l1.4-1.6 4.7 2c.7.3 1 1.1.8 1.8l-.5 1.7c-.2.6-.8 1-1.5 1C10.4 21 3 13.6 3 4.7c0-.7.4-1.3 1-1.5l1.7-.5c.7-.2 1.5.1 1.8.8z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="topbar__ctaText">
+        불편사항 문의<br><b>(점장 연락)</b>
+      </span>
+    </a>
   </header>
 
-  <!-- 전체 컨테이너 -->
-  <main class="page-container">
-
-    <!-- 탭 버튼 -->
-    <nav class="tab-nav" aria-label="메인 메뉴">
-      <button class="tab-btn active" data-tab="tab-products">매장/상품 소개</button>
-      <button class="tab-btn" data-tab="tab-staff">상담사 소개</button>
-      <button class="tab-btn" data-tab="tab-contact">상담신청&연락</button>
+  <!-- Main -->
+  <main class="app" id="app" aria-label="KT플라자 만남로점 통합 페이지">
+    <!-- Tabs -->
+    <nav class="tabs" aria-label="메인 탭">
+      <button class="tab is-active" type="button" data-tab="t1" aria-controls="t1" aria-selected="true">
+        매장&상품 소개
+      </button>
+      <button class="tab" type="button" data-tab="t2" aria-controls="t2" aria-selected="false">
+        상담사 소개
+      </button>
+      <button class="tab" type="button" data-tab="t3" aria-controls="t3" aria-selected="false">
+        상담신청&연락
+      </button>
     </nav>
 
-
-    <!--Tap 1. 상품/혜택 소개-->
-    <section id="tab-products" class="tab-content active" aria-label="매장/상품 소개">
-
-      <!-- 매장 단체사진 & 소개 -->
-      <section class="section-block">
-        <h2 class="section-title"><p style="font-size:30px; line-height:0.7;">반갑습니다!</p> KT플라자 유성점입니다.</h2>
-        <div class="group-photo-wrapper">
-          <img src="단체사진.jpg" alt="KT플라자 유성점 단체사진" class="group-photo">
+    <!-- Panels -->
+    <section class="panel is-active" id="t1" role="tabpanel" aria-label="매장&상품 소개">
+      <!-- Head 1: Store Intro -->
+      <div class="section">
+        <div class="heroCard heroCard--bg">
+          <div class="heroCard__text">
+            <!-- NEW: heroCard 주제/부제 (Fade In & Out) -->
+            <div class="heroIntro" aria-hidden="true">
+              <div class="heroIntro__line1">안녕하세요!!<br>우리동네 최적의 통신설계도우미</div>
+              <div class="heroIntro__line2">KT플라자 만남로점입니다!</div>
+            </div>
+        
+            <figure class="heroCard__media">
+              <img src="assets/team.png" alt="KT플라자 만남로점 직원 단체사진" loading="lazy" />
+              <figcaption>
+                어떤 일로 찾아 오셨을까요??
+                <span class="heroCard__trust">KT 공식 교육을 받은 전문 상담인력이<br>성심성의껏 도와드리겠습니다.</span>
+              </figcaption>
+            </figure>
+            
+            <!-- ✅ NEW: 핵심 역량(아코디언 카드형 bullets) -->
+            <div class="coreBullets">
+              <div class="coreBullets__head">
+                <h4 class="coreBullets__title">왜 KT플라자를 선택해야 하나요?</h4>
+                <p class="coreBullets__sub">
+                  통신은 ‘구매’에서 끝나지 않는 서비스입니다.<br />
+                  KT플라자는 고객 여러분의 통신상품 이용에<br>불편함이 없도록 도와드리는 kt 공식 매장입니다.
+                </p>
+              </div>
+            
+              <ul class="bulletCards" data-bullet-accord>
+                <!-- A -->
+                <li class="bulletCard is-open">
+                  <button class="bulletCard__btn" type="button" aria-expanded="true">
+                    <span class="bulletCard__kicker">1</span>
+                    <span class="bulletCard__title">신뢰할 수 있습니다.</span>
+                    <span class="bulletCard__icon" aria-hidden="true">⌄</span>
+                  </button>
+            
+                  <div class="bulletCard__panel">
+                    <div class="bulletCard__panelInner">
+                      <p class="bulletCard__headline">저희는 KT 투자 100% 직영점입니다.</p>
+                      <p class="bulletCard__desc">
+                        많은 상품과 서비스를,<br> 정확하고 투명한 기준에 따라 제공합니다.
+                      </p>
+                    </div>
+                  </div>
+                </li>
+            
+                <!-- B -->
+                <li class="bulletCard">
+                  <button class="bulletCard__btn" type="button" aria-expanded="false">
+                    <span class="bulletCard__kicker">2</span>
+                    <span class="bulletCard__title">사후 케어도 책임집니다.</span>
+                    <span class="bulletCard__icon" aria-hidden="true">⌄</span>
+                  </button>
+            
+                  <div class="bulletCard__panel">
+                    <div class="bulletCard__panelInner">
+                      <p class="bulletCard__headline">개통은 시작일 뿐, 관리도 필수입니다!</p>
+                      <p class="bulletCard__desc">
+                        요금·결합·명의·분실·해지까지,<br>문제 발생 시 다시 찾아오실 수 있는 매장입니다.
+                      </p>
+                    </div>
+                              </div>     </li>
+            
+                <!-- C -->
+                <li class="bulletCard">
+                  <button class="bulletCard__btn" type="button" aria-expanded="false">
+                    <span class="bulletCard__kicker">3</span>
+                    <span class="bulletCard__title">사용패턴 맞춤 요금설계</span>
+                    <span class="bulletCard__icon" aria-hidden="true">⌄</span>
+                  </button>
+            
+                  <div class="bulletCard__panel">
+                    <div class="bulletCard__panelInner">
+                      <p class="bulletCard__headline">혜택은 다소 낮으나, 알맞게 안내합니다.</p>
+                      <p class="bulletCard__desc">
+                        사용 패턴·가족 구성·생활 환경을 고려해<br>불필요한 요금을 줄여드립니다.
+                      </p>
+                    </div>
+                  </div>
+                </li>
+            
+                <!-- D -->
+                <li class="bulletCard">
+                  <button class="bulletCard__btn" type="button" aria-expanded="false">
+                    <span class="bulletCard__kicker">4</span>
+                    <span class="bulletCard__title">소상공인 친화적 솔루션</span>
+                    <span class="bulletCard__icon" aria-hidden="true">⌄</span>
+                  </button>
+            
+                  <div class="bulletCard__panel">
+                    <div class="bulletCard__panelInner">
+                      <p class="bulletCard__headline">통신상품은 훌륭한 서포터입니다.</p>
+                      <p class="bulletCard__desc">
+                        사업장 환경에 맞춘 인터넷·전화·AI 상품 등<br>매장 운영에 도움이 되는 솔루션을 제안합니다.
+                      </p>
+                    </div>
+                  </div>
+                </li>
+            
+                <!-- E -->
+                <li class="bulletCard">
+                  <button class="bulletCard__btn" type="button" aria-expanded="false">
+                    <span class="bulletCard__kicker">5</span>
+                    <span class="bulletCard__title">어르신맞춤 쉬운 상담</span>
+                    <span class="bulletCard__icon" aria-hidden="true">⌄</span>
+                  </button>
+            
+                  <div class="bulletCard__panel">
+                    <div class="bulletCard__panelInner">
+                      <p class="bulletCard__headline">통신상품, 어렵게 느낄 필요 없습니다.</p>
+                      <p class="bulletCard__desc">
+                        시니어 고객 맞춤 설명으로, 쉽고 천천히 이해될 때까지 안내드립니다.
+                      </p>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            
+              <div class="coreBullets__cta">
+                지금 쓰는 통신상품, <br>정말 ‘나에게 맞는 선택’인지 점검해보세요.
+              </div>
+            </div>
+          </div>
         </div>
-        <p class="section-subtitle">
-          <br><b>고객님에게 최상의 서비스를 제공하기 위해</b>
-          <br><br>상품 공부를 게을리하지 않고,
-          <br>직원 서로가 서로를 도와가며 일하는
-          <br>최고의 팀워크를 자랑하는 유성직영점입니다.<br><br>
-          <b>천천히 둘러보시고, 궁금한 점 생기면 연락주세요!</b>
-        </p>
+      </div>
 
-      </section>
-      <!-- 이 달의 소식 -->
-      <section class="section-block">
-        <h2 class="section-title">회사 홍보영상</h2>
-        <p class="section-subtitle">
-          우리 회사의 홍보영상입니다!<br>재미로 봐주세요 :)
-        </p>
-
-        <div class="video-wrapper">
-          <iframe
-            src="https://youtube.com/embed/SkzZH_pqx2g?si=7PbXxi5nR1E32Ca1"
-            title="이 달의 소식"
-            frameborder="0"
-            allowfullscreen
-          ></iframe>
+      <!-- Head 2: This Month News (Naver Clip Card) -->
+      <div class="section">
+        <div class="section__head">
+          <h2>KT Plaza 홍보영상</h2>
+          <p class="section__desc">모르시면 손해봅니다!<br>KT에서 제공하는 소식을 동영상으로 만나보세요.</p>
         </div>
-      </section>
-
-
-      <!-- 판매 제품 소개 (세로 리스트) -->
-      <section class="section-block">
-        <h2 class="section-title">상품/매장 소개</h2>
-        <p class="section-subtitle">
-          우리 매장의 소식을 한눈에 살펴보세요!<br>카드 클릭 시 네이버 블로그로 이동합니다.
-        </p>
-
-        <div class="product-list">
-
+      
+        <a class="clipCard" target="_blank" rel="noopener"
+           href="https://m.naver.com/shorts/?mediaId=F6567E2F212E021108671BC3E08F6DBD2B83&serviceType=MOMENT&blogId=kt_mannamro&docNo=12753335">
+          <div class="clipCard__thumb">
+            <!-- 썸네일은 ① 직접 만든 이미지 업로드(권장) 또는 ② 네이버가 제공하는 이미지 URL -->
+            <img src="assets/news-thumb.jpg" alt="이 달의 소식 클립 썸네일" />
+            <div class="clipCard__badge">NAVER CLIP</div>
+            <div class="clipCard__play">▶</div>
+          </div>
+      
+          <div class="clipCard__body">
+            <div class="clipCard__title">내가 KT플라자에서 이뤄낸 것들..!</div>
+            <div class="clipCard__sub">네이버 클립 바로 재생하기</div>
+          </div>
+        </a>
+      </div>
+      
+      <!-- Head 3: 판매상품/소식 소개 -->
+      <div class="section" id="products">
+        <div class="section__head">
+          <h2>이 달의 소식</h2>
+          <p class="section__desc">핵심만 빠르게 보고, 자세한 내용은 블로그에서 확인하세요.</p>
+        </div>
+      
+        <div class="promoStack">
           <!-- 카드 1 -->
-          <a href="https://blog.naver.com/yc20508/224099159989"
-             target="_blank"
-             class="product-card">
-            <div class="product-thumbnail" style="background-image: url('연말행사이벤트.png');"></div>
-            <div class="product-info">
-              <p class="product-head">이 달의 메인 이벤트</p>
-              <h3 class="product-title">[굿바이 2025]<br>연말 행사 이벤트 시작!<br>놓치면 후회하실걸요~? ㅇㅂㅇ</h3>
-            </div>
-          </a>
-
+          <article class="promoCard">
+            <a class="promoCard__link" href="https://blog.naver.com/kt_mannamro/224123069041" target="_blank" rel="noopener">
+              <div class="promoCard__media">
+                <img src="assets/promo/promo1.png" alt="홍보물 1 썸네일" loading="lazy" />
+                <span class="promoBadge">BLOG</span>
+              </div>
+      
+              <div class="promoCard__content">
+                <h3 class="promoCard__title">🐎2026 병오년도 KT플라자 만남로점과 함께!🐎</h3>
+                <ul class="promoBullets">
+                  <li>연말정산 대비 요금제 점검</li>
+                  <li>통신비 절약 컨설팅</li>
+                  <li>연말감사 선물 이벤트</li>
+                </ul>
+      
+                <div class="promoCta">
+                  <span>자세히 보기</span>
+                  <span aria-hidden="true">→</span>
+                </div>
+              </div>
+            </a>
+          </article>
+      
           <!-- 카드 2 -->
-          <a href="https://blog.naver.com/yc20508/224086303332"
-             target="_blank"
-             class="product-card">
-            <div class="product-thumbnail" style="background-image: url('점프4.png');"></div>
-            <div class="product-info">
-              <p class="product-head">키즈 & 실버 전용폰</p>
-              <h3 class="product-title">[점프4 0원!!]<br>키즈&실버 전용폰,<br>무료로 가져가세용!</h3>
-            </div>
-          </a>
-
+          <article class="promoCard">
+            <a class="promoCard__link" href="https://www.naver.com" target="_blank" rel="noopener">
+              <div class="promoCard__media">
+                <img src="assets/promo/promo2.jpg" alt="홍보물 2 썸네일" loading="lazy" />
+                <span class="promoBadge">BLOG</span>
+              </div>
+      
+              <div class="promoCard__content">
+                <h3 class="promoCard__title">인터넷·TV 신규/이전 설치</h3>
+                <ul class="promoBullets">
+                  <li>주소/건물 환경 기반 가능 상품 조회</li>
+                  <li>가정/매장 상황별 요금 최적화</li>
+                  <li>혜택 변동사항까지 투명하게 안내</li>
+                </ul>
+      
+                <div class="promoCta">
+                  <span>자세히 보기</span>
+                  <span aria-hidden="true">→</span>
+                </div>
+              </div>
+            </a>
+          </article>
+      
           <!-- 카드 3 -->
-          <a href="https://blog.naver.com/yc20508/224081145498"
-             target="_blank"
-             class="product-card">
-            <div class="product-thumbnail" style="background-image: url('맘편안폰.png');"></div>
-            <div class="product-info">
-              <p class="product-head">어르신 추천 휴대폰</p>
-              <h3 class="product-title">[맘편안폰S]<br>어르신을 위해 태어났습니다.<br>핵심기능 총정리!</h3>
+          <article class="promoCard">
+            <a class="promoCard__link" href="https://www.naver.com" target="_blank" rel="noopener">
+              <div class="promoCard__media">
+                <img src="assets/promo/promo3.jpg" alt="홍보물 3 썸네일" loading="lazy" />
+                <span class="promoBadge">BLOG</span>
+              </div>
+      
+              <div class="promoCard__content">
+                <h3 class="promoCard__title">기기변경·번호이동 추천 조합</h3>
+                <ul class="promoBullets">
+                  <li>사용 패턴 기반 요금제 추천</li>
+                  <li>부가서비스 구성까지 월 요금 안내</li>
+                  <li>개통 후 불편사항까지 사후 케어</li>
+                </ul>
+      
+                <div class="promoCta">
+                  <span>자세히 보기</span>
+                  <span aria-hidden="true">→</span>
+                </div>
+              </div>
+            </a>
+          </article>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="panel" id="t2" role="tabpanel" aria-label="상담사 소개">
+      <!-- Head 1: Boss -->
+      <div class="section">
+        <div class="section__head">
+          <h2>우리 점장님을 소개합니다!</h2>
+          <p class="section__desc">카드를 누르면 개인 안내(Manus) 페이지로 이동합니다.</p>
+        </div>
+
+        <a class="profileCard profileCard--primary" data-consultant="조아라 점장" href="https://www.naver.com" target="_blank" rel="noopener">
+          <img class="profileCard__img" src="assets/profile/boss.jpg" alt="점장 프로필" loading="lazy" />
+          <div class="profileCard__meta">
+            <div class="profileCard__name">조아라 점장</div>
+            <div class="profileCard__tags">
+              <span class="tag">빠른 응대</span>
+              <span class="tag">정확한 설계</span>
+              <span class="tag">사후케어</span>
+              <span class="tag">하이오더</span>
+              <span class="tag">VOC처리</span>
+              <span class="tag">미모도 1등</span>
+            </div>
+            <div class="profileCard__hint">눌러서 자세히 보기 →</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Head 2: Managers -->
+      <div class="section">
+        <div class="section__head">
+          <h2>자랑스러운 우리 매니저님들을 소개합니다!</h2>
+          <p class="section__desc">1줄 1명, Large Card 세로 나열 구성입니다.</p>
+        </div>
+
+        <div class="stack">
+          <a class="profileCard" data-consultant="한준원 매니저" href="https://predeploy-2ec096ab-hanjunfolio-aemswqav.manus.space/" target="_blank" rel="noopener">
+            <img class="profileCard__img" src="assets/profile/m1.jpg" alt="매니저 1 프로필" loading="lazy" />
+            <div class="profileCard__meta">
+              <div class="profileCard__name">한준원 매니저</div>
+              <div class="profileCard__tags">
+                <span class="tag">친절 설명</span>
+                <span class="tag">요금 최적화</span>
+                <span class="tag">초보도 OK</span>
+                <span class="tag">손자 체질</span>
+              </div>
+              <div class="profileCard__hint">눌러서 자세히 보기 →</div>
             </div>
           </a>
 
-          <!-- 카드 4 -->
-          <a href="https://blog.naver.com/yc20508/224079732122"
-             target="_blank"
-             class="product-card">
-            <div class="product-thumbnail" style="background-image: url('유성.png');"></div>
-            <div class="product-info">
-              <p class="product-head">매장 소개</p>
-              <h3 class="product-title">[KT플라자 유성점]<br>왜 선택하셔야 할까요? (^3^)/</h3>
+          <a class="profileCard" data-consultant="정지윤 매니저" href="https://ktconsultant-resu9b4t.manus.space/" target="_blank" rel="noopener">
+            <img class="profileCard__img" src="assets/profile/m2.jpg" alt="매니저 2 프로필" loading="lazy" />
+            <div class="profileCard__meta">
+              <div class="profileCard__name">정지윤 매니저</div>
+              <div class="profileCard__tags">
+                <span class="tag">결합 전문가</span>
+                <span class="tag">속도 상담</span>
+                <span class="tag">사후 케어</span>
+                <span class="tag">Gemini 마스터</span>
+              </div>
+              <div class="profileCard__hint">눌러서 자세히 보기 →</div>
             </div>
           </a>
 
+          <a class="profileCard" data-consultant="허성민 매니저" href="https://www.naver.com" target="_blank" rel="noopener">
+            <img class="profileCard__img" src="assets/profile/m3.jpg" alt="매니저 3 프로필" loading="lazy" />
+            <div class="profileCard__meta">
+              <div class="profileCard__name">허성민 매니저</div>
+              <div class="profileCard__tags">
+                <span class="tag">꼼꼼한 비교</span>
+                <span class="tag">가성비 설계</span>
+                <span class="tag">활기찬 막내</span>
+                <span class="tag">영상속 그남자</span>
+              </div>
+              <div class="profileCard__hint">눌러서 자세히 보기 →</div>
+            </div>
+          </a>
         </div>
-      </section>
+      </div>
+    </section>
 
-    </section> <!-- ← Tap 1 종료 -->
-
-
-    <!--Tap 2. 상담사 소개-->
-    <section id="tab-staff" class="tab-content" aria-label="상담사 소개">
-
-      <!-- 점장님 소개 -->
-      <section class="section-block">
-        <h2 class="section-title">우리 점장님을 소개합니다!</h2>
-        <p class="section-subtitle">
-          유성직영점을 책임지는<br>실력 Top! 외모도 Top!인 점장님입니다.
-        </p>
-
-        <a href="https://kimsuhyun-bnzjxwpe.manus.space"
-           target="_blank"
-           class="staff-card large-card">
-
-          <div class="staff-avatar">
-            <img src="김수현점장님.jpg" class="profile-photo" alt="김수현 점장">
-          </div>
-
-          <div class="staff-info">
-            <h3 class="staff-name">김수현 점장</h3>
-            <p class="staff-role">유성직영점 점장</p>
-            <p class="staff-desc">
-              A to Z! 모든 제품을 잘 아는<br>
-              우리 회사 대표 컨설턴트입니다.
-            </p>
-            <span class="staff-link-text">자세한 프로필 보기 →</span>
-          </div>
-
-        </a>
-      </section>
-
-
-      <!-- 매니저 소개 -->
-      <section class="section-block">
-        <h2 class="section-title">자랑스러운 우리 매니저들을 소개합니다!</h2>
-        <p class="section-subtitle">
-          유성직영점의 든든한 상담 파트너들입니다.
-        </p>
-
-        <!-- 김승원 -->
-        <a href="https://ktplaza-hfzq9ucj.manus.space/"
-           target="_blank"
-           class="staff-card large-card">
-          <div class="staff-avatar">
-            <img src="김승원부점장님.jpg" class="profile-photo" alt="김승원 부점장">
-          </div>
-          <div class="staff-info">
-            <h3 class="staff-name">김승원 부점장</h3>
-            <p class="staff-desc">휴대폰·인터넷 결합으로<br>통신비 절감 솔루션을 제안합니다.</p>
-            <span class="staff-link-text">프로필 보기 →</span>
-          </div>
-        </a>
-
-        <!-- 윤기석 -->
-        <a href="https://m.booking.naver.com/booking/5/bizes/957817/items/6484624"
-           target="_blank"
-           class="staff-card large-card">
-          <div class="staff-avatar">
-            <img src="윤기석대리님.jpg" class="profile-photo" alt="윤기석 대리">
-          </div>
-          <div class="staff-info">
-            <h3 class="staff-name">윤기석 매니저</h3>
-            <p class="staff-desc">복잡한 요금제도 쉽게!<br>이해가 쉽고 친절한 설명이 장점입니다.</p>
-            <span class="staff-link-text">프로필 보기 →</span>
-          </div>
-        </a>
-
-        <!-- 이병훈 -->
-        <a href="https://ktportfolio-jjzmfgav.manus.space"
-           target="_blank"
-           class="staff-card large-card">
-          <div class="staff-avatar">
-            <img src="이병훈사원님.jpg" class="profile-photo" alt="이병훈 사원">
-          </div>
-          <div class="staff-info">
-            <h3 class="staff-name">이병훈 매니저</h3>
-            <p class="staff-desc">[찾아가는 영업 전문가]<br>바빠서 매장을 못오신다구요?<br>제가 직접 찾아가겠습니다!</p>
-            <span class="staff-link-text">프로필 보기 →</span>
-          </div>
-        </a>
-
-        <!-- 이호준 -->
-        <a href="https://hojunfolio-fphshg9y.manus.space"
-           target="_blank"
-           class="staff-card large-card">
-          <div class="staff-avatar">
-            <img src="이호준사원님.jpg" class="profile-photo" alt="이호준 사원">
-          </div>
-          <div class="staff-info">
-            <h3 class="staff-name">이호준 매니저</h3>
-            <p class="staff-desc">아이폰 전문가 겸!<br>유선 네트워크 지식 전문가입니다 ^^7</p>
-            <span class="staff-link-text">프로필 보기 →</span>
-          </div>
-        </a>
-
-        <!-- 임다은 -->
-        <a href="https://m.booking.naver.com/booking/5/bizes/957817/items/7168461"
-           target="_blank"
-           class="staff-card large-card">
-          <div class="staff-avatar">
-            <img src="임다은사원님.jpg" class="profile-photo" alt="임다은 사원">
-          </div>
-          <div class="staff-info">
-            <h3 class="staff-name">임다은 매니저</h3>
-            <p class="staff-desc">애플 서비스센터 출신,<br>곤란한 문제가 생기셨다면<br>저를 찾아주세요!</p>
-            <span class="staff-link-text">프로필 보기 →</span>
-          </div>
-        </a>
-
-      </section>
-
-    </section> <!-- ← Tap 2 종료 -->
-
-
-    <!--Tap 3. 상담신청 & 연락-->
-    <section id="tab-contact" class="tab-content" aria-label="상담신청&연락">
-
-      <!-- 네이버 예약 -->
-      <section class="section-block">
-        <h2 class="section-title">네이버 예약</h2>
-        <p class="section-subtitle">
-          상담받고 싶은 담당자를 선택해 원하는 시간으로 예약해 주세요.
-        </p>
-
-        <div class="reserve-grid">
-
-          <a href="https://m.booking.naver.com/booking/5/bizes/957817/items/6484616"
-             target="_blank" class="reserve-card">
-            <h3 class="reserve-name">김수현 점장</h3>
-            <p class="reserve-desc">전 상품 통합 상담</p>
-            <span class="reserve-link">네이버 예약 바로가기 →</span>
-          </a>
-
-          <a href="https://m.booking.naver.com/booking/5/bizes/957817/items/6484577"
-             target="_blank" class="reserve-card">
-            <h3 class="reserve-name">김승원 부점장</h3>
-            <p class="reserve-desc">휴대폰/인터넷 결합 상담</p>
-            <span class="reserve-link">네이버 예약 바로가기 →</span>
-          </a>
-
-          <a href="https://m.booking.naver.com/booking/5/bizes/957817/items/6484624"
-             target="_blank" class="reserve-card">
-            <h3 class="reserve-name">윤기석 매니저</h3>
-            <p class="reserve-desc">우리 매장 갤럭시 전문가!</p>
-            <span class="reserve-link">네이버 예약 바로가기 →</span>
-          </a>
-
-          <a href="https://m.booking.naver.com/booking/5/bizes/957817/items/7178693"
-             target="_blank" class="reserve-card">
-            <h3 class="reserve-name">이병훈 매니저</h3>
-            <p class="reserve-desc">찾아가는 영업</p>
-            <span class="reserve-link">네이버 예약 바로가기 →</span>
-          </a>
-
-          <a href="https://m.booking.naver.com/booking/5/bizes/957817/items/7168461"
-             target="_blank" class="reserve-card">
-            <h3 class="reserve-name">이호준 매니저</h3>
-            <p class="reserve-desc">유선상품, 아이폰 전문가</p>
-            <span class="reserve-link">네이버 예약 바로가기 →</span>
-          </a>
-
-          <a href="https://m.booking.naver.com/booking/5/bizes/957817/items/7168461"
-             target="_blank" class="reserve-card">
-            <h3 class="reserve-name">임다은 매니저</h3>
-            <p class="reserve-desc">초보자/어르신 맞춤 상담</p>
-            <span class="reserve-link">네이버 예약 바로가기 →</span>
-          </a>
-
+    <section class="panel" id="t3" role="tabpanel" aria-label="상담신청&연락">
+      <!-- Head 1: Naver Reservation -->
+      <div class="section">
+        <div class="section__head">
+          <h2>네이버 예약</h2>
+          <p class="section__desc">업무별 예약 경로입니다.<br>지금 바로 예약주세요!!</p>
         </div>
-      </section>
 
+        <div class="grid">
+          <a class="actionTile" data-cta="register_bangmoon" data-card="t3" href="https://naver.me/5f5pEd3p" target="_blank" rel="noopener">
+            <div class="actionTile__title">매장방문 상담예약</div>
+            <div class="actionTile__sub">네이버 예약 열기</div>
+          </a>
+          <a class="actionTile" data-cta="register_gibyun" data-card="t3" href="https://naver.me/xLsAvNJ1" target="_blank" rel="noopener">
+            <div class="actionTile__title">기기변경 상담예약</div>
+            <div class="actionTile__sub">네이버 예약 열기</div>
+          </a>
+          <a class="actionTile" data-cta="register_I_hate_CS" data-card="t3" href="https://naver.me/IGZyAskv" target="_blank" rel="noopener">
+            <div class="actionTile__title">일반 CS업무 예약</div>
+            <div class="actionTile__sub">네이버 예약 열기</div>
+          </a>
+          <a class="actionTile" data-cta="register_internet_or_TV" data-card="t3" href="https://naver.me/G1mS9pHt" target="_blank" rel="noopener">
+            <div class="actionTile__title">유선상품 상담예약</div>
+            <div class="actionTile__sub">네이버 예약 열기</div>
+          </a>
+        </div>
+      </div>
 
-      <!-- 매장 전화연락 -->
-      <section class="section-block">
-        <h2 class="section-title">매장 전화연락</h2>
-        <p class="section-subtitle">
-          급한 문의사항? 전화로 바로 확인하세요.
-        </p>
-        <a href="tel:0428252780" class="btn primary-btn wide">
-          042-825-2780 전화하기
+      <!-- Head 2: Phone -->
+      <div class="section">
+        <div class="section__head">
+          <h2>매장 전화연락</h2>
+          <p class="section__desc">터치하면 바로 통화 연결됩니다.</p>
+        </div>
+
+        <a class="callBanner" data-cta="phone_call" data-card="t3" href="tel:041-622-6120">
+          <div class="callBanner__left">
+            <div class="callBanner__title">041-622-6120</div>
+            <div class="callBanner__sub">지금 전화로 빠르게 문의하기</div>
+          </div>
+          <div class="callBanner__right">전화</div>
         </a>
-      </section>
+      </div>
 
+      <!-- Head 3: Blog -->
+      <div class="section">
+        <div class="section__head">
+          <h2>네이버 블로그 방문</h2>
+          <p class="section__desc">매장 소식/이벤트를 가장 빠르게 확인하세요.</p>
+        </div>
 
-      <!-- 네이버 블로그 -->
-      <section class="section-block">
-        <h2 class="section-title">네이버 블로그 방문</h2>
-        <p class="section-subtitle">
-          자세한 이벤트 안내는 블로그에서 확인하실 수 있어요.
-        </p>
-        <a href="https://blog.naver.com/yc20508"
-           target="_blank"
-           class="btn secondary-btn wide">
-          매장 블로그 바로가기
+        <a class="btnWide" data-cta="naver_blog" data-card="t3" href="https://www.naver.com" target="_blank" rel="noopener">
+          블로그 바로가기 →
         </a>
-      </section>
+      </div>
 
-      <!-- 단골 등록 -->
-      <section class="section-block">
-        <h2 class="section-title">우리 매장 단골, 안하실거에요? ㅠㅅㅠ</h2>
-        <p class="section-subtitle">
-          매장단골 등록해 두시면<br>신규 혜택과 이벤트 소식을 가장 먼저 받아보실 수 있습니다.
-        </p>
-        <a href="https://su.kt.co.kr/SlRDJIC"
-           target="_blank"
-           class="btn accent-btn wide">
-          단골 등록하러 가기
+      <!-- Head 4: Favorites -->
+      <div class="section">
+        <div class="section__head">
+          <h2>우리매장 단골 등록하시고, 실시간으로 혜택 안내받으세요!</h2>
+          <p class="section__desc">단골 등록 링크를 연결해두면 안내가 훨씬 쉬워집니다.</p>
+        </div>
+
+        <a class="btnWide btnWide--accent" data-cta="favorite_register" data-card="t3" href="https://www.naver.com" target="_blank" rel="noopener">
+          단골 등록하러 가기 →
         </a>
-      </section>
+      </div>
 
-    </section> <!-- ← Tap 3 종료 -->
-
+      <footer class="footer">
+        <div class="footer__line">© KT플라자 만남로점</div>
+        <div class="footer__small">* 정책/재고/혜택은 상황에 따라 변동될 수 있습니다.</div>
+      </footer>
+    </section>
   </main>
 
-
-  <!-- 탭 script -->
   <script src="script.js"></script>
-
-  <!-- Service Worker registration -->
+    <!-- Service Worker registration for PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         navigator.serviceWorker.register('service-worker.js')
-          .then(reg => console.log('ServiceWorker registered:', reg.scope))
-          .catch(err => console.log('ServiceWorker registration failed:', err));
+          .then(function(reg) {
+            console.log('ServiceWorker registered:', reg.scope);
+          })
+          .catch(function(error) {
+            console.log('ServiceWorker registration failed:', error);
+          });
       });
     }
   </script>
+  <!-- Floating Naver Reservation Button -->
+  <a class="fabNaver" data-cta="naver_reserve" data-card="floating" href="https://naver.me/5f5pEd3p" target="_blank" rel="noopener" aria-label="네이버 예약 바로가기">
+    <span class="fabNaver__logo" aria-hidden="true">N</span>
+    <span class="fabNaver__text">예약</span>
+  </a>
 
 </body>
 </html>

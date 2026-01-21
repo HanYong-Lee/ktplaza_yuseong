@@ -1,173 +1,270 @@
-// ====== 이벤트 팝업 설정 ======
+(() => {
+  // ---------- Intro: tap to skip ----------
+  const intro = document.getElementById("intro");
+  const introVideo = document.getElementById("introVideo");
+  const skipBtn = document.getElementById("skipBtn");
 
-// 팝업 ON/OFF 스위치 (이벤트 없을 땐 false 로만 바꾸면 됨)
-const EVENT_POPUP_ENABLED = true;
+  const hideIntro = () => {
+    if (!intro || intro.classList.contains("is-hidden")) return;
+    intro.classList.add("is-hidden");
+    try { introVideo && introVideo.pause(); } catch (e) {}
+    document.body.style.overflow = "";
+  };
 
-// 이벤트 기간 설정 (예시: 2025-01-01 ~ 2025-01-15)
-// 한국 시간 기준으로 맞춰 주세요.
-const EVENT_START = new Date("2025-12-14T00:00:00+09:00");
-const EVENT_END   = new Date("2025-12-18T23:59:59+09:00");
+  // Lock scroll while intro is showing
+  if (intro) document.body.style.overflow = "hidden";
 
-// 객관식 정답 설정 (위 HTML에서 value="B" 가 정답이면 "B")
-const EVENT_CORRECT_ANSWER = "B";
+  // If video ends, auto-hide
+  if (introVideo) {
+    introVideo.addEventListener("ended", hideIntro);
+    introVideo.addEventListener("error", hideIntro); // fail-safe
+  }
 
-// 같은 브라우저에서 이미 참여한 사람에게는 다시 안 보여주고 싶으면 true
-const EVENT_USE_LOCALSTORAGE = true;
-const EVENT_STORAGE_KEY = "kt_yuseong_event_joined_2025_01";
+  // Tap anywhere to skip
+  if (intro) intro.addEventListener("click", hideIntro);
+  if (skipBtn) skipBtn.addEventListener("click", (e) => { e.stopPropagation(); hideIntro(); });
 
+  // ---------- Tabs ----------
+  const tabButtons = Array.from(document.querySelectorAll(".tab"));
+  const panels = Array.from(document.querySelectorAll(".panel"));
 
-// 탭 전환 기능
-const tabButtons = document.querySelectorAll(".tab-btn");
-const tabContents = document.querySelectorAll(".tab-content");
-
-tabButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const targetId = btn.dataset.tab;
-
-    // 버튼 active 처리
-    tabButtons.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    // 콘텐츠 표시 전환
-    tabContents.forEach((section) => {
-      if (section.id === targetId) {
-        section.classList.add("active");
-      } else {
-        section.classList.remove("active");
-      }
+  const setActiveTab = (id) => {
+    tabButtons.forEach(btn => {
+      const isOn = btn.dataset.tab === id;
+      btn.classList.toggle("is-active", isOn);
+      btn.setAttribute("aria-selected", String(isOn));
     });
+    panels.forEach(p => p.classList.toggle("is-active", p.id === id));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-    // 탭 이동 시 스크롤을 상단으로 약간 올려 주기 (모바일 UX)
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => setActiveTab(btn.dataset.tab));
+  });
+
+  // Jump links inside cards (data-jump-tab)
+  document.querySelectorAll("[data-jump-tab]").forEach(el => {
+    el.addEventListener("click", (e) => {
+      const id = el.getAttribute("data-jump-tab");
+      if (!id) return;
+      e.preventDefault();
+      setActiveTab(id);
     });
   });
-});
 
-// 캐러셀 기능
-const productCards = document.querySelectorAll(".product-card");
-const prevBtn = document.querySelector(".carousel-arrow.prev");
-const nextBtn = document.querySelector(".carousel-arrow.next");
-const dots = document.querySelectorAll(".dot");
+  // ---------- Fade lines: re-trigger when returning to Tab1 ----------
+  const reRunFadeLines = () => {
+    const container = document.querySelector("#t1 .fadeLines[data-fade-lines]");
+    if (!container) return;
+    const spans = Array.from(container.querySelectorAll("span"));
+    spans.forEach((s) => {
+      s.style.animation = "none";
+      s.offsetHeight; // reflow
+      s.style.animation = "";
+    });
+  };
 
-let currentIndex = 0;
-
-function showProduct(index) {
-  // index 범위 보정
-  if (index < 0) {
-    index = productCards.length - 1;
-  } else if (index >= productCards.length) {
-    index = 0;
-  }
-  currentIndex = index;
-
-  productCards.forEach((card, i) => {
-    card.classList.toggle("active", i === currentIndex);
-  });
-
-  dots.forEach((dot, i) => {
-    dot.classList.toggle("active", i === currentIndex);
-  });
-}
-
-if (prevBtn && nextBtn && productCards.length > 0) {
-  prevBtn.addEventListener("click", () => {
-    showProduct(currentIndex - 1);
-  });
-
-  nextBtn.addEventListener("click", () => {
-    showProduct(currentIndex + 1);
-  });
-}
-
-// 점(인디케이터) 클릭 시 이동
-dots.forEach((dot) => {
-  dot.addEventListener("click", () => {
-    const index = Number(dot.dataset.index);
-    showProduct(index);
-  });
-});
-
-// 초기 상태
-showProduct(0);
-
-// ====== 이벤트 팝업 로직 ======
-
-function isWithinEventPeriod() {
-  const now = new Date();
-  return now >= EVENT_START && now <= EVENT_END;
-}
-
-function hasAlreadyJoined() {
-  if (!EVENT_USE_LOCALSTORAGE) return false;
-  return localStorage.getItem(EVENT_STORAGE_KEY) === "1";
-}
-
-function markJoined() {
-  if (!EVENT_USE_LOCALSTORAGE) return;
-  localStorage.setItem(EVENT_STORAGE_KEY, "1");
-}
-
-function showPopup(id) {
-  const el = document.getElementById(id);
-  if (el) {
-    el.classList.remove("hidden");
-  }
-}
-
-function hidePopup(id) {
-  const el = document.getElementById(id);
-  if (el) {
-    el.classList.add("hidden");
-  }
-}
-
-
-
-// DOM 준비 후 이벤트 팝업 초기화
-window.addEventListener("load", function () {
-  if (!EVENT_POPUP_ENABLED) return;
-  if (!isWithinEventPeriod()) return;
-  if (hasAlreadyJoined()) return;
-
-  const eventPopup = document.getElementById("event-popup");
-  const correctPopup = document.getElementById("event-correct-popup");
-  const submitBtn = document.getElementById("event-submit-btn");
-  const closeButtons = document.querySelectorAll("[data-popup-close]");
-
-  if (!eventPopup || !correctPopup || !submitBtn) {
-    return;
-  }
-
-  // 팝업 열기
-  showPopup("event-popup");
-
-  // 닫기 버튼
-  closeButtons.forEach((btn) => {
+  tabButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      const targetId = btn.getAttribute("data-popup-close");
-      hidePopup(targetId);
+      if (btn.dataset.tab === "t1") reRunFadeLines();
     });
   });
+})();
 
-  // 정답 제출
-  submitBtn.addEventListener("click", () => {
-    const checked = document.querySelector('input[name="event-answer"]:checked');
+(function () {
+  const wrap = document.querySelector("[data-bullet-accord]");
+  if (!wrap) return;
 
-    if (!checked) {
-      alert("정답이라고 생각하는 보기를 선택해 주세요!");
-      return;
+  const items = Array.from(wrap.querySelectorAll(".bulletCard"));
+
+  // 초기 aria 동기화
+  items.forEach((li) => {
+    const btn = li.querySelector(".bulletCard__btn");
+    if (!btn) return;
+    btn.setAttribute("aria-expanded", String(li.classList.contains("is-open")));
+  });
+
+  wrap.addEventListener("click", (e) => {
+    const btn = e.target.closest(".bulletCard__btn");
+    if (!btn) return;
+
+    const li = btn.closest(".bulletCard");
+    if (!li) return;
+
+    const willOpen = !li.classList.contains("is-open");
+
+    // 하나만 열리게
+    items.forEach((other) => {
+      other.classList.remove("is-open");
+      const b = other.querySelector(".bulletCard__btn");
+      if (b) b.setAttribute("aria-expanded", "false");
+    });
+
+    // 선택한 것만 토글
+    if (willOpen) {
+      li.classList.add("is-open");
+      btn.setAttribute("aria-expanded", "true");
+      li.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
+  });
+})();
 
-    if (checked.value !== EVENT_CORRECT_ANSWER) {
-      alert("아쉽지만 정답이 아닙니다 😢 다시 선택해 주세요!");
-      return;
-    }
+// =========================
+// Analytics (KT Plaza simple)
+// =========================
+const ANALYTICS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzK7T__F4hhaXbSeZ038iU2N0R66jtkktx5qiMGst45rFArff5nQMNOLEeN3AxNyWS_PA/exec";
 
-    // 정답 처리
-    markJoined();
-    hidePopup("event-popup");
-    showPopup("event-correct-popup");
+// ✅ UA 요약(축약) 함수: raw UA 전체를 저장하지 않음
+function getUaSummary(){
+  const ua = (navigator.userAgent || "").toLowerCase();
+  const plat = (navigator.platform || "").toLowerCase();
+
+  // deviceType
+  const isMobile =
+    /mobi|android|iphone|ipad|ipod|iemobile|windows phone/.test(ua);
+  const deviceType = isMobile ? "mobile" : "desktop";
+
+  // os
+  let os = "other";
+  if (/android/.test(ua)) os = "android";
+  else if (/iphone|ipad|ipod/.test(ua)) os = "ios";
+  else if (/windows/.test(ua) || /win/.test(plat)) os = "windows";
+  else if (/mac os|macintosh/.test(ua) || /mac/.test(plat)) os = "mac";
+  else if (/linux/.test(ua) || /linux/.test(plat)) os = "linux";
+
+  // browser
+  let browser = "other";
+  // order matters
+  if (/edg\//.test(ua)) browser = "edge";
+  else if (/opr\//.test(ua) || /opera/.test(ua)) browser = "opera";
+  else if (/samsungbrowser\//.test(ua)) browser = "samsung";
+  else if (/chrome\//.test(ua) && !/chromium/.test(ua)) browser = "chrome";
+  else if (/firefox\//.test(ua)) browser = "firefox";
+  else if (/safari\//.test(ua) && !/chrome\//.test(ua) && !/crios\//.test(ua)) browser = "safari";
+
+  return `${deviceType}|${os}|${browser}`;
+}
+
+function getSessionId(){
+  const k = "ktplaza_sid";
+  let sid = localStorage.getItem(k);
+  if (!sid) {
+    sid = "s_" + Math.random().toString(36).slice(2) + "_" + Date.now();
+    localStorage.setItem(k, sid);
+  }
+  return sid;
+}
+
+const sid = getSessionId();
+let sessionStart = Date.now();
+
+let activeTab = "t1";
+let tabStart = Date.now();
+
+// 중복 전송 방지
+let didFlush = false;
+
+function sendEvent(payload){
+  const bodyObj = {
+    ts: Date.now(),
+    sessionId: sid,
+    url: location.href,
+    // ✅ raw UA 대신 요약값만 저장
+    ua: getUaSummary(),
+    ...payload
+  };
+
+  const url = `${ANALYTICS_ENDPOINT}?path=collect`;
+  const json = JSON.stringify(bodyObj);
+
+  // 1) sendBeacon 우선
+  if (navigator.sendBeacon) {
+    try {
+      const blob = new Blob([json], { type: "text/plain;charset=UTF-8" });
+      const ok = navigator.sendBeacon(url, blob);
+      if (ok) return;
+    } catch (e) {}
+  }
+
+  // 2) fallback: no-cors
+  fetch(url, {
+    method: "POST",
+    body: json,
+    keepalive: true,
+    mode: "no-cors",
+    cache: "no-store",
+  }).catch(()=>{});
+}
+
+// 최초 방문
+sendEvent({ event:"page_view" });
+
+// 탭 체류 기록
+function recordTabDwell(nextTab){
+  const now = Date.now();
+  const dur = now - tabStart;
+  if (dur > 300) {
+    sendEvent({ event:"tab_dwell", tab: activeTab, durationMs: dur });
+  }
+  activeTab = nextTab;
+  tabStart = now;
+}
+
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const target = btn.getAttribute("data-tab-target") || btn.dataset.tab || "";
+    if (target) recordTabDwell(target);
   });
 });
+
+// 상담사 카드 클릭
+document.addEventListener("click", (e)=>{
+  const c = e.target.closest("[data-consultant]");
+  if (c) {
+    sendEvent({
+      event:"consultant_click",
+      targetType:"consultant",
+      targetId: c.dataset.consultant || "unknown"
+    });
+  }
+});
+
+// CTA 클릭
+document.addEventListener("click", (e)=>{
+  const a = e.target.closest("[data-cta]");
+  if (a) {
+    sendEvent({
+      event:"cta_click",
+      targetType:"cta",
+      targetId: a.dataset.cta || "unknown",
+      cardId: a.dataset.card || "default",
+    });
+  }
+});
+
+function flushOnExit(){
+  if (didFlush) return;
+  didFlush = true;
+
+  const now = Date.now();
+
+  // 마지막 탭 체류
+  const dur = now - tabStart;
+  if (dur > 300) {
+    sendEvent({ event:"tab_dwell", tab: activeTab, durationMs: dur });
+  }
+
+  // 세션 종료
+  const total = now - sessionStart;
+  if (total > 300) {
+    sendEvent({ event:"session_end", durationMs: total });
+  }
+}
+
+window.addEventListener("pagehide", flushOnExit);
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") flushOnExit();
+});
+
+window.addEventListener("beforeunload", flushOnExit);
