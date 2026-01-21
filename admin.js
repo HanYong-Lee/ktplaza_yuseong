@@ -1,4 +1,4 @@
-const ANALYTICS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzK7T__F4hhaXbSeZ038iU2N0R66jtkktx5qiMGst45rFArff5nQMNOLEeN3AxNyWS_PA/exec"; // <-- 교체
+const ANALYTICS_ENDPOINT = "https://script.google.com/macros/s/AKfycbxTL6tU-PwMX5MOX0AHQGTaBbMfju_wz8GelbeWdfdhAivqzG8P8xGYErRIVPj76B1Sjg/exec"; // <-- 교체
 
 function fmtPct(x){ return (x*100).toFixed(1) + "%"; }
 
