@@ -309,3 +309,46 @@ document.addEventListener("click", (e) => {
     return;
   }
 });
+
+/* ===== ClipCard Inline Player Patch (필수) ===== */
+(() => {
+  document.addEventListener("click", (e) => {
+    const closeBtn = e.target.closest(".js-close-video");
+    const cardBtn  = e.target.closest(".js-open-video");
+
+    // 1) 닫기 (clipCard 내부 닫기 버튼)
+    if (closeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const card = closeBtn.closest(".clipCard");
+      if (!card) return;
+
+      const player = card.querySelector(".clipCard__player");
+      const iframe = card.querySelector(".clipCard__iframe");
+
+      if (player) player.classList.add("hidden");
+      if (iframe) iframe.src = ""; // 재생 중지
+      card.classList.remove("is-playing");
+      return;
+    }
+
+    // 2) 열기 (clipCard 클릭)
+    if (cardBtn) {
+      e.preventDefault();
+
+      const videoId = cardBtn.dataset.videoId;
+      const player = cardBtn.querySelector(".clipCard__player");
+      const iframe = cardBtn.querySelector(".clipCard__iframe");
+
+      if (!videoId || !player || !iframe) return;
+
+      // 모바일 autoplay 안전장치: mute=1 필수급
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playsinline=1&rel=0`;
+
+      player.classList.remove("hidden");
+      cardBtn.classList.add("is-playing");
+      return;
+    }
+  });
+})();
