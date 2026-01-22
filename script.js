@@ -270,11 +270,30 @@ document.addEventListener("visibilitychange", () => {
 window.addEventListener("beforeunload", flushOnExit);
 
 document.addEventListener("click", (e) => {
-  const openBtn = e.target.closest(".js-open-video");
   const closeBtn = e.target.closest(".js-close-video");
+  const openBtn = e.target.closest(".js-open-video");
 
-  // 열기
+  // ✅ 1) 닫기를 먼저 처리 (버튼이 clipCard 내부에 있어서 open보다 먼저 잡아야 함)
+  if (closeBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const card = closeBtn.closest(".clipCard");
+    if (!card) return;
+
+    const player = card.querySelector(".clipCard__player");
+    const iframe = card.querySelector(".clipCard__iframe");
+
+    if (player) player.classList.add("hidden");
+    if (iframe) iframe.src = ""; // 정지
+    card.classList.remove("is-playing");
+    return;
+  }
+
+  // ✅ 2) 열기 처리
   if (openBtn) {
+    e.preventDefault();
+
     const card = openBtn; // button 자체가 clipCard
     const videoId = card.dataset.videoId;
     const player = card.querySelector(".clipCard__player");
@@ -282,23 +301,11 @@ document.addEventListener("click", (e) => {
 
     if (!player || !iframe || !videoId) return;
 
-    // 재생 시작
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0`;
+    // ✅ 핵심: 모바일 autoplay 막힘 방지용 mute=1 추가
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playsinline=1&rel=0`;
+
     player.classList.remove("hidden");
     card.classList.add("is-playing");
     return;
   }
-
-  // 닫기
-  if (closeBtn) {
-    const card = closeBtn.closest(".clipCard");
-    if (!card) return;
-    const player = card.querySelector(".clipCard__player");
-    const iframe = card.querySelector(".clipCard__iframe");
-
-    if (player) player.classList.add("hidden");
-    if (iframe) iframe.src = ""; // 정지
-    card.classList.remove("is-playing");
-  }
 });
-;
