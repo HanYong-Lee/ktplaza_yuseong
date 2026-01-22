@@ -1338,3 +1338,31 @@ html, body{
   background: #ffffff;
   cursor: pointer;
 }
+
+/* ===== ClipCard z-index patch (영상이 안 보이는 문제 해결) ===== */
+.clipCard__thumb { position: relative; }
+
+.clipCard__player{
+  position: absolute;
+  inset: 0;
+  z-index: 50;          /* ✅ 썸네일 이미지보다 위 */
+  background: #000;
+}
+
+.clipCard__iframe{
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.clipCard__badge,
+.clipCard__play{
+  position: absolute;
+  z-index: 40;          /* ✅ 플레이어보다 아래(재생 시 숨김 처리) */
+}
+
+.clipCard.is-playing .clipCard__thumb img{
+  opacity: 0;           /* ✅ 이미지가 위에 덮는 케이스 차단 */
+  pointer-events: none;
+}
