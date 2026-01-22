@@ -209,17 +209,30 @@
         <button type="button" class="clipCard js-open-video"
                 data-video-id="SkzZH_pqx2g"
                 aria-label="유튜브 쇼츠 재생">
+        
           <div class="clipCard__thumb">
-            <img src="assets/news-thumb.png" alt="이 달의 소식 클립 썸네일" />
+            <img class="clipCard__img" src="assets/news-thumb.png" alt="이 달의 소식 클립 썸네일" />
             <div class="clipCard__badge">Youtube Shorts</div>
             <div class="clipCard__play">▶</div>
+        
+            <!-- ✅ 카드 내부 플레이어 (처음엔 숨김) -->
+            <div class="clipCard__player hidden">
+              <button type="button" class="clipCard__close js-close-video" aria-label="영상 닫기">✕</button>
+              <iframe class="clipCard__iframe"
+                src=""
+                title="KT Plaza 홍보영상"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+            </div>
           </div>
-      
+        
           <div class="clipCard__body">
             <div class="clipCard__title">호갱이라는 단어, 이제는 없어져야 합니다.</div>
             <div class="clipCard__sub">촬영: KT플라자 관저중로점</div>
           </div>
         </button>
+
       
         <!-- ✅ 페이지 내부 재생 영역(기본 숨김) -->
         <div class="ytInline hidden" id="promoVideo">
