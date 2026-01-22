@@ -112,7 +112,7 @@
 // =========================
 // Analytics (KT Plaza simple)
 // =========================
-const ANALYTICS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzK7T__F4hhaXbSeZ038iU2N0R66jtkktx5qiMGst45rFArff5nQMNOLEeN3AxNyWS_PA/exec";
+const ANALYTICS_ENDPOINT = "https://script.google.com/macros/s/AKfycbxTL6tU-PwMX5MOX0AHQGTaBbMfju_wz8GelbeWdfdhAivqzG8P8xGYErRIVPj76B1Sjg/exec";
 
 // ✅ UA 요약(축약) 함수: raw UA 전체를 저장하지 않음
 function getUaSummary(){
