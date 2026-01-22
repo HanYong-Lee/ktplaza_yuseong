@@ -177,88 +177,75 @@ function sendEvent(payload){
   const url = `${ANALYTICS_ENDPOINT}?path=collect`;
   const json = JSON.stringify(bodyObj);
 
-  // 1) sendBeacon 우선
+  // sendBeacon 우선 (페이지 이탈 시에도 비교적 안정)
   if (navigator.sendBeacon) {
     try {
-      const blob = new Blob([json], { type: "text/plain;charset=UTF-8" });
-      const ok = navigator.sendBeacon(url, blob);
-      if (ok) return;
+      const blob = new Blob([json], { type: "application/json" });
+      navigator.sendBeacon(url, blob);
+      return;
     } catch (e) {}
   }
 
-  // 2) fallback: no-cors
+  // fallback fetch
   fetch(url, {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: json,
-    keepalive: true,
-    mode: "no-cors",
-    cache: "no-store",
-  }).catch(()=>{});
+    keepalive: true
+  }).catch(() => {});
 }
 
-// 최초 방문
-sendEvent({ event:"page_view" });
+// 탭 전환 dwell 기록: .tab 버튼을 기준으로
+document.querySelectorAll(".tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const now = Date.now();
+    const dwell = now - tabStart;
 
-// 탭 체류 기록
-function recordTabDwell(nextTab){
-  const now = Date.now();
-  const dur = now - tabStart;
-  if (dur > 300) {
-    sendEvent({ event:"tab_dwell", tab: activeTab, durationMs: dur });
-  }
-  activeTab = nextTab;
-  tabStart = now;
-}
+    // 이전 탭 dwell 기록
+    sendEvent({ event: "tab_dwell", tab: activeTab, durationMs: dwell });
 
-document.querySelectorAll(".tab").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const target = btn.getAttribute("data-tab-target") || btn.dataset.tab || "";
-    if (target) recordTabDwell(target);
+    // 현재 탭 업데이트
+    activeTab = btn.dataset.tab || activeTab;
+    tabStart = now;
   });
 });
 
-// 상담사 카드 클릭
-document.addEventListener("click", (e)=>{
-  const c = e.target.closest("[data-consultant]");
-  if (c) {
+// 카드/CTA 클릭 로그 (필요한 클래스/데이터 속성이 있을 때만)
+document.addEventListener("click", (e) => {
+  const cta = e.target.closest("[data-cta]");
+  if (cta) {
     sendEvent({
-      event:"consultant_click",
-      targetType:"consultant",
-      targetId: c.dataset.consultant || "unknown"
+      event: "cta_click",
+      targetType: cta.dataset.targetType || "cta",
+      targetId: cta.dataset.targetId || "",
+      cardId: cta.dataset.cardId || ""
+    });
+  }
+
+  const consultant = e.target.closest("[data-consultant]");
+  if (consultant) {
+    sendEvent({
+      event: "consultant_click",
+      targetType: "consultant",
+      targetId: consultant.dataset.consultant || "",
+      cardId: consultant.dataset.cardId || ""
     });
   }
 });
 
-// CTA 클릭
-document.addEventListener("click", (e)=>{
-  const a = e.target.closest("[data-cta]");
-  if (a) {
-    sendEvent({
-      event:"cta_click",
-      targetType:"cta",
-      targetId: a.dataset.cta || "unknown",
-      cardId: a.dataset.card || "default",
-    });
-  }
-});
-
+// 세션 종료 시 stay time 기록
 function flushOnExit(){
   if (didFlush) return;
   didFlush = true;
 
   const now = Date.now();
 
-  // 마지막 탭 체류
-  const dur = now - tabStart;
-  if (dur > 300) {
-    sendEvent({ event:"tab_dwell", tab: activeTab, durationMs: dur });
-  }
+  // 마지막 탭 dwell
+  const dwell = now - tabStart;
+  sendEvent({ event: "tab_dwell", tab: activeTab, durationMs: dwell });
 
-  // 세션 종료
-  const total = now - sessionStart;
-  if (total > 300) {
-    sendEvent({ event:"session_end", durationMs: total });
-  }
+  // 세션 총 체류 시간
+  sendEvent({ event: "session_end", durationMs: now - sessionStart });
 }
 
 window.addEventListener("pagehide", flushOnExit);
@@ -269,36 +256,70 @@ document.addEventListener("visibilitychange", () => {
 
 window.addEventListener("beforeunload", flushOnExit);
 
+// =========================
+// ClipCard (Option A): 카드 내부에서 유튜브 쇼츠 재생
+// =========================
 document.addEventListener("click", (e) => {
-  const openBtn = e.target.closest(".js-open-video");
-  const closeBtn = e.target.closest(".js-close-video");
+  // Option A: clipCard 내부에서 바로 재생 (새 탭/유튜브 앱으로 안 넘어가게)
+  const card = e.target.closest(".clipCard");
+  if (!card) return;
 
-  // 열기
-  if (openBtn) {
-    const card = openBtn; // button 자체가 clipCard
-    const videoId = card.dataset.videoId;
-    const player = card.querySelector(".clipCard__player");
-    const iframe = card.querySelector(".clipCard__iframe");
+  // 이미 재생 중이면 무시(원하면 토글로 바꿔도 됨)
+  if (card.classList.contains("is-playing")) return;
 
-    if (!player || !iframe || !videoId) return;
+  // 링크 기본동작 방지 (a태그일 때)
+  e.preventDefault();
 
-    // 재생 시작
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0`;
-    player.classList.remove("hidden");
-    card.classList.add("is-playing");
+  // 1) videoId 추출 (data-video-id 우선, 없으면 href에서 추출)
+  let videoId = card.dataset.videoId || "";
+
+  if (!videoId) {
+    const href = card.getAttribute("href") || "";
+    // 가능한 케이스: /embed/ID, watch?v=ID, youtu.be/ID, shorts/ID
+    const patterns = [
+      /youtube\.com\/embed\/([a-zA-Z0-9_-]{6,})/i,
+      /youtube\.com\/shorts\/([a-zA-Z0-9_-]{6,})/i,
+      /youtu\.be\/([a-zA-Z0-9_-]{6,})/i,
+      /[?&]v=([a-zA-Z0-9_-]{6,})/i
+    ];
+    for (const p of patterns) {
+      const mm = href.match(p);
+      if (mm && mm[1]) { videoId = mm[1]; break; }
+    }
+  }
+
+  if (!videoId) {
+    console.warn("[clipCard] videoId를 찾지 못했습니다. data-video-id 또는 href를 확인하세요.");
     return;
   }
 
-  // 닫기
-  if (closeBtn) {
-    const card = closeBtn.closest(".clipCard");
-    if (!card) return;
-    const player = card.querySelector(".clipCard__player");
-    const iframe = card.querySelector(".clipCard__iframe");
+  // 2) 썸네일 영역에 iframe 삽입
+  const thumb = card.querySelector(".clipCard__thumb");
+  if (!thumb) return;
 
-    if (player) player.classList.add("hidden");
-    if (iframe) iframe.src = ""; // 정지
-    card.classList.remove("is-playing");
+  // 기존 img를 숨김(나중에 되돌릴 수도 있어서 제거 대신 숨김)
+  const img = thumb.querySelector("img");
+  if (img) img.style.display = "none";
+
+  // play 아이콘 숨김
+  const play = thumb.querySelector(".clipCard__play");
+  if (play) play.style.display = "none";
+
+  // 이미 iframe이 있으면 재사용, 없으면 생성
+  let iframe = thumb.querySelector("iframe.clipCard__iframe");
+  if (!iframe) {
+    iframe = document.createElement("iframe");
+    iframe.className = "clipCard__iframe";
+    iframe.setAttribute("title", card.querySelector(".clipCard__title")?.textContent?.trim() || "YouTube video");
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
+    iframe.setAttribute("allowfullscreen", "");
+    // iOS에서 전체화면/앱 전환 최소화
+    iframe.setAttribute("playsinline", "1");
+    thumb.appendChild(iframe);
   }
+
+  iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0&modestbranding=1`;
+
+  card.classList.add("is-playing");
 });
-;
