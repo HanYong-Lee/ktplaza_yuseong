@@ -1366,3 +1366,55 @@ html, body{
   opacity: 0;           /* ✅ 이미지가 위에 덮는 케이스 차단 */
   pointer-events: none;
 }
+
+/* ===== ClipCard Inline Player Patch (필수) ===== */
+.hidden { display: none !important; }
+
+/* clipCard를 button으로 써도 모양 유지 */
+.clipCard{
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+
+/* 카드 내부에서 영상이 썸네일 위로 정확히 덮이게 */
+.clipCard__thumb{ position: relative; }
+
+.clipCard__player{
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: #000;
+}
+
+.clipCard__iframe{
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* 재생 중엔 배지/재생버튼 숨김 */
+.clipCard.is-playing .clipCard__badge,
+.clipCard.is-playing .clipCard__play{
+  display: none !important;
+}
+
+/* 닫기 버튼 */
+.clipCard__close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 60;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(0,0,0,.45);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
