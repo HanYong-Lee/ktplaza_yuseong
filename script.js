@@ -268,3 +268,25 @@ document.addEventListener("visibilitychange", () => {
 });
 
 window.addEventListener("beforeunload", flushOnExit);
+
+document.addEventListener("click", (e) => {
+  const openBtn = e.target.closest(".js-open-video");
+  const closeBtn = e.target.closest(".js-close-video");
+
+  const box = document.getElementById("promoVideo");
+  const iframe = document.getElementById("promoIframe");
+  if (!box || !iframe) return;
+
+  if (openBtn) {
+    const id = openBtn.dataset.videoId;
+    // ✅ autoplay를 넣어야 "안에서 재생" 체감이 좋아짐 (모바일은 정책상 터치 후에만 자동재생 가능)
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&rel=0`;
+    box.classList.remove("hidden");
+    return;
+  }
+
+  if (closeBtn) {
+    box.classList.add("hidden");
+    iframe.src = ""; // ✅ 닫을 때 정지
+  }
+});
