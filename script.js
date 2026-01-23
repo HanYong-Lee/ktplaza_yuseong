@@ -1,49 +1,68 @@
+/* KT Plaza - script.js (cleaned)
+   - Intro overlay (optional)
+   - Tabs
+   - Bullet accordion
+   - Lightweight analytics (Google Apps Script)
+*/
 (() => {
-  // ---------- Intro: tap to skip ----------
-  const intro = document.getElementById("intro");
-  const introVideo = document.getElementById("introVideo");
-  const skipBtn = document.getElementById("skipBtn");
+  "use strict";
+
+  // ---------------------------
+  // Helpers
+  // ---------------------------
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  // ---------------------------
+  // 1) Intro (optional)
+  // ---------------------------
+  const intro = $("#intro");
+  const introVideo = $("#introVideo");
+  const skipBtn = $("#skipBtn");
 
   const hideIntro = () => {
     if (!intro || intro.classList.contains("is-hidden")) return;
     intro.classList.add("is-hidden");
-    try { introVideo && introVideo.pause(); } catch (e) {}
+    try { introVideo?.pause(); } catch (_) {}
     document.body.style.overflow = "";
   };
 
-  // Lock scroll while intro is showing
-  if (intro) document.body.style.overflow = "hidden";
-
-  // If video ends, auto-hide
+  if (intro) {
+    document.body.style.overflow = "hidden";
+    intro.addEventListener("click", hideIntro);
+  }
+  if (skipBtn) {
+    skipBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      hideIntro();
+    });
+  }
   if (introVideo) {
     introVideo.addEventListener("ended", hideIntro);
     introVideo.addEventListener("error", hideIntro); // fail-safe
   }
 
-  // Tap anywhere to skip
-  if (intro) intro.addEventListener("click", hideIntro);
-  if (skipBtn) skipBtn.addEventListener("click", (e) => { e.stopPropagation(); hideIntro(); });
-
-  // ---------- Tabs ----------
-  const tabButtons = Array.from(document.querySelectorAll(".tab"));
-  const panels = Array.from(document.querySelectorAll(".panel"));
+  // ---------------------------
+  // 2) Tabs
+  // ---------------------------
+  const tabButtons = $$(".tab");
+  const panels = $$(".panel");
 
   const setActiveTab = (id) => {
-    tabButtons.forEach(btn => {
-      const isOn = btn.dataset.tab === id;
-      btn.classList.toggle("is-active", isOn);
-      btn.setAttribute("aria-selected", String(isOn));
+    if (!id) return;
+    tabButtons.forEach((btn) => {
+      const on = btn.dataset.tab === id;
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-selected", String(on));
     });
-    panels.forEach(p => p.classList.toggle("is-active", p.id === id));
+    panels.forEach((p) => p.classList.toggle("is-active", p.id === id));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  tabButtons.forEach(btn => {
-    btn.addEventListener("click", () => setActiveTab(btn.dataset.tab));
-  });
+  tabButtons.forEach((btn) => btn.addEventListener("click", () => setActiveTab(btn.dataset.tab)));
 
-  // Jump links inside cards (data-jump-tab)
-  document.querySelectorAll("[data-jump-tab]").forEach(el => {
+  // Jump links (data-jump-tab="t2" 같은 형태)
+  $$("[data-jump-tab]").forEach((el) => {
     el.addEventListener("click", (e) => {
       const id = el.getAttribute("data-jump-tab");
       if (!id) return;
@@ -52,303 +71,196 @@
     });
   });
 
-  // ---------- Fade lines: re-trigger when returning to Tab1 ----------
+  // (Optional) fadeLines 재실행 (t1 복귀 시)
   const reRunFadeLines = () => {
-    const container = document.querySelector("#t1 .fadeLines[data-fade-lines]");
+    const container = $("#t1 .fadeLines[data-fade-lines]");
     if (!container) return;
-    const spans = Array.from(container.querySelectorAll("span"));
-    spans.forEach((s) => {
+    $$("span", container).forEach((s) => {
       s.style.animation = "none";
       s.offsetHeight; // reflow
       s.style.animation = "";
     });
   };
 
-  tabButtons.forEach(btn => {
+  tabButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       if (btn.dataset.tab === "t1") reRunFadeLines();
     });
   });
-})();
 
-(function () {
-  const wrap = document.querySelector("[data-bullet-accord]");
-  if (!wrap) return;
+  // ---------------------------
+  // 3) Core bullets accordion
+  // ---------------------------
+  const accordWrap = $("[data-bullet-accord]");
+  if (accordWrap) {
+    const items = $$(".bulletCard", accordWrap);
 
-  const items = Array.from(wrap.querySelectorAll(".bulletCard"));
-
-  // 초기 aria 동기화
-  items.forEach((li) => {
-    const btn = li.querySelector(".bulletCard__btn");
-    if (!btn) return;
-    btn.setAttribute("aria-expanded", String(li.classList.contains("is-open")));
-  });
-
-  wrap.addEventListener("click", (e) => {
-    const btn = e.target.closest(".bulletCard__btn");
-    if (!btn) return;
-
-    const li = btn.closest(".bulletCard");
-    if (!li) return;
-
-    const willOpen = !li.classList.contains("is-open");
-
-    // 하나만 열리게
-    items.forEach((other) => {
-      other.classList.remove("is-open");
-      const b = other.querySelector(".bulletCard__btn");
-      if (b) b.setAttribute("aria-expanded", "false");
+    // init aria
+    items.forEach((li) => {
+      const b = $(".bulletCard__btn", li);
+      if (b) b.setAttribute("aria-expanded", String(li.classList.contains("is-open")));
     });
 
-    // 선택한 것만 토글
-    if (willOpen) {
-      li.classList.add("is-open");
-      btn.setAttribute("aria-expanded", "true");
-      li.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }
-  });
-})();
+    accordWrap.addEventListener("click", (e) => {
+      const btn = e.target.closest(".bulletCard__btn");
+      if (!btn) return;
 
-// =========================
-// Analytics (KT Plaza simple)
-// =========================
-const ANALYTICS_ENDPOINT = "https://script.google.com/macros/s/AKfycbxTL6tU-PwMX5MOX0AHQGTaBbMfju_wz8GelbeWdfdhAivqzG8P8xGYErRIVPj76B1Sjg/exec";
+      const li = btn.closest(".bulletCard");
+      if (!li) return;
 
-// ✅ UA 요약(축약) 함수: raw UA 전체를 저장하지 않음
-function getUaSummary(){
-  const ua = (navigator.userAgent || "").toLowerCase();
-  const plat = (navigator.platform || "").toLowerCase();
+      const willOpen = !li.classList.contains("is-open");
 
-  // deviceType
-  const isMobile =
-    /mobi|android|iphone|ipad|ipod|iemobile|windows phone/.test(ua);
-  const deviceType = isMobile ? "mobile" : "desktop";
+      // close all
+      items.forEach((other) => {
+        other.classList.remove("is-open");
+        const b = $(".bulletCard__btn", other);
+        if (b) b.setAttribute("aria-expanded", "false");
+      });
 
-  // os
-  let os = "other";
-  if (/android/.test(ua)) os = "android";
-  else if (/iphone|ipad|ipod/.test(ua)) os = "ios";
-  else if (/windows/.test(ua) || /win/.test(plat)) os = "windows";
-  else if (/mac os|macintosh/.test(ua) || /mac/.test(plat)) os = "mac";
-  else if (/linux/.test(ua) || /linux/.test(plat)) os = "linux";
-
-  // browser
-  let browser = "other";
-  // order matters
-  if (/edg\//.test(ua)) browser = "edge";
-  else if (/opr\//.test(ua) || /opera/.test(ua)) browser = "opera";
-  else if (/samsungbrowser\//.test(ua)) browser = "samsung";
-  else if (/chrome\//.test(ua) && !/chromium/.test(ua)) browser = "chrome";
-  else if (/firefox\//.test(ua)) browser = "firefox";
-  else if (/safari\//.test(ua) && !/chrome\//.test(ua) && !/crios\//.test(ua)) browser = "safari";
-
-  return `${deviceType}|${os}|${browser}`;
-}
-
-function getSessionId(){
-  const k = "ktplaza_sid";
-  let sid = localStorage.getItem(k);
-  if (!sid) {
-    sid = "s_" + Math.random().toString(36).slice(2) + "_" + Date.now();
-    localStorage.setItem(k, sid);
+      // open selected
+      if (willOpen) {
+        li.classList.add("is-open");
+        btn.setAttribute("aria-expanded", "true");
+        li.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
+    });
   }
-  return sid;
-}
 
-const sid = getSessionId();
-let sessionStart = Date.now();
+  // ---------------------------
+  // 4) Analytics (simple)
+  // ---------------------------
+  const ANALYTICS_ENDPOINT =
+    "https://script.google.com/macros/s/AKfycbxTL6tU-PwMX5MOX0AHQGTaBbMfju_wz8GelbeWdfdhAivqzG8P8xGYErRIVPj76B1Sjg/exec";
 
-let activeTab = "t1";
-let tabStart = Date.now();
+  const getUaSummary = () => {
+    const ua = (navigator.userAgent || "").toLowerCase();
+    const plat = (navigator.platform || "").toLowerCase();
 
-// 중복 전송 방지
-let didFlush = false;
+    const isMobile = /mobi|android|iphone|ipad|ipod|iemobile|windows phone/.test(ua);
+    const deviceType = isMobile ? "mobile" : "desktop";
 
-function sendEvent(payload){
-  const bodyObj = {
-    ts: Date.now(),
-    sessionId: sid,
-    url: location.href,
-    // ✅ raw UA 대신 요약값만 저장
-    ua: getUaSummary(),
-    ...payload
+    let os = "other";
+    if (/android/.test(ua)) os = "android";
+    else if (/iphone|ipad|ipod/.test(ua)) os = "ios";
+    else if (/windows/.test(ua) || /win/.test(plat)) os = "windows";
+    else if (/mac os|macintosh/.test(ua) || /mac/.test(plat)) os = "mac";
+    else if (/linux/.test(ua)) os = "linux";
+
+    let browser = "other";
+    if (/edg\//.test(ua)) browser = "edge";
+    else if (/opr\//.test(ua) || /opera/.test(ua)) browser = "opera";
+    else if (/samsungbrowser\//.test(ua)) browser = "samsung";
+    else if (/chrome\//.test(ua) && !/chromium/.test(ua)) browser = "chrome";
+    else if (/firefox\//.test(ua)) browser = "firefox";
+    else if (/safari\//.test(ua) && !/chrome\//.test(ua) && !/crios\//.test(ua)) browser = "safari";
+
+    return `${deviceType}|${os}|${browser}`;
   };
 
-  const url = `${ANALYTICS_ENDPOINT}?path=collect`;
-  const json = JSON.stringify(bodyObj);
+  const getSessionId = () => {
+    const k = "ktplaza_sid";
+    let sid = localStorage.getItem(k);
+    if (!sid) {
+      sid = "s_" + Math.random().toString(36).slice(2) + "_" + Date.now();
+      localStorage.setItem(k, sid);
+    }
+    return sid;
+  };
 
-  // 1) sendBeacon 우선
-  if (navigator.sendBeacon) {
-    try {
-      const blob = new Blob([json], { type: "text/plain;charset=UTF-8" });
-      const ok = navigator.sendBeacon(url, blob);
-      if (ok) return;
-    } catch (e) {}
-  }
+  const sid = getSessionId();
+  const sessionStart = Date.now();
+  let activeTab = "t1";
+  let tabStart = Date.now();
+  let didFlush = false;
 
-  // 2) fallback: no-cors
-  fetch(url, {
-    method: "POST",
-    body: json,
-    keepalive: true,
-    mode: "no-cors",
-    cache: "no-store",
-  }).catch(()=>{});
-}
+  const sendEvent = (payload) => {
+    const bodyObj = {
+      ts: Date.now(),
+      sessionId: sid,
+      url: location.href,
+      ua: getUaSummary(),
+      ...payload,
+    };
 
-// 최초 방문
-sendEvent({ event:"page_view" });
+    const url = `${ANALYTICS_ENDPOINT}?path=collect`;
+    const json = JSON.stringify(bodyObj);
 
-// 탭 체류 기록
-function recordTabDwell(nextTab){
-  const now = Date.now();
-  const dur = now - tabStart;
-  if (dur > 300) {
-    sendEvent({ event:"tab_dwell", tab: activeTab, durationMs: dur });
-  }
-  activeTab = nextTab;
-  tabStart = now;
-}
+    // 1) sendBeacon 우선
+    if (navigator.sendBeacon) {
+      try {
+        const blob = new Blob([json], { type: "text/plain;charset=UTF-8" });
+        if (navigator.sendBeacon(url, blob)) return;
+      } catch (_) {}
+    }
 
-document.querySelectorAll(".tab").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const target = btn.getAttribute("data-tab-target") || btn.dataset.tab || "";
-    if (target) recordTabDwell(target);
+    // 2) fallback fetch
+    fetch(url, {
+      method: "POST",
+      body: json,
+      keepalive: true,
+      mode: "no-cors",
+      cache: "no-store",
+    }).catch(() => {});
+  };
+
+  // page view
+  sendEvent({ event: "page_view" });
+
+  const recordTabDwell = (nextTab) => {
+    const now = Date.now();
+    const dur = now - tabStart;
+    if (dur > 300) sendEvent({ event: "tab_dwell", tab: activeTab, durationMs: dur });
+    activeTab = nextTab;
+    tabStart = now;
+  };
+
+  $$(".tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.tab || "";
+      if (target) recordTabDwell(target);
+    });
   });
-});
 
-// 상담사 카드 클릭
-document.addEventListener("click", (e)=>{
-  const c = e.target.closest("[data-consultant]");
-  if (c) {
-    sendEvent({
-      event:"consultant_click",
-      targetType:"consultant",
-      targetId: c.dataset.consultant || "unknown"
-    });
-  }
-});
-
-// CTA 클릭
-document.addEventListener("click", (e)=>{
-  const a = e.target.closest("[data-cta]");
-  if (a) {
-    sendEvent({
-      event:"cta_click",
-      targetType:"cta",
-      targetId: a.dataset.cta || "unknown",
-      cardId: a.dataset.card || "default",
-    });
-  }
-});
-
-function flushOnExit(){
-  if (didFlush) return;
-  didFlush = true;
-
-  const now = Date.now();
-
-  // 마지막 탭 체류
-  const dur = now - tabStart;
-  if (dur > 300) {
-    sendEvent({ event:"tab_dwell", tab: activeTab, durationMs: dur });
-  }
-
-  // 세션 종료
-  const total = now - sessionStart;
-  if (total > 300) {
-    sendEvent({ event:"session_end", durationMs: total });
-  }
-}
-
-window.addEventListener("pagehide", flushOnExit);
-
-document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden") flushOnExit();
-});
-
-window.addEventListener("beforeunload", flushOnExit);
-
-document.addEventListener("click", (e) => {
-  const closeBtn = e.target.closest(".js-close-video");
-  const openBtn = e.target.closest(".js-open-video");
-
-  // ✅ 1) 닫기를 먼저 처리 (버튼이 clipCard 내부에 있어서 open보다 먼저 잡아야 함)
-  if (closeBtn) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const card = closeBtn.closest(".clipCard");
-    if (!card) return;
-
-    const player = card.querySelector(".clipCard__player");
-    const iframe = card.querySelector(".clipCard__iframe");
-
-    if (player) player.classList.add("hidden");
-    if (iframe) iframe.src = ""; // 정지
-    card.classList.remove("is-playing");
-    return;
-  }
-
-  // ✅ 2) 열기 처리
-  if (openBtn) {
-    e.preventDefault();
-
-    const card = openBtn; // button 자체가 clipCard
-    const videoId = card.dataset.videoId;
-    const player = card.querySelector(".clipCard__player");
-    const iframe = card.querySelector(".clipCard__iframe");
-
-    if (!player || !iframe || !videoId) return;
-
-    // ✅ 핵심: 모바일 autoplay 막힘 방지용 mute=1 추가
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playsinline=1&rel=0`;
-
-    player.classList.remove("hidden");
-    card.classList.add("is-playing");
-    return;
-  }
-});
-
-/* ===== ClipCard Inline Player Patch (필수) ===== */
-(() => {
+  // 클릭 이벤트 수집: 컨설턴트/CTA
   document.addEventListener("click", (e) => {
-    const closeBtn = e.target.closest(".js-close-video");
-    const cardBtn  = e.target.closest(".js-open-video");
-
-    // 1) 닫기 (clipCard 내부 닫기 버튼)
-    if (closeBtn) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const card = closeBtn.closest(".clipCard");
-      if (!card) return;
-
-      const player = card.querySelector(".clipCard__player");
-      const iframe = card.querySelector(".clipCard__iframe");
-
-      if (player) player.classList.add("hidden");
-      if (iframe) iframe.src = ""; // 재생 중지
-      card.classList.remove("is-playing");
-      return;
+    const c = e.target.closest("[data-consultant]");
+    if (c) {
+      sendEvent({
+        event: "consultant_click",
+        targetType: "consultant",
+        targetId: c.dataset.consultant || "unknown",
+      });
     }
 
-    // 2) 열기 (clipCard 클릭)
-    if (cardBtn) {
-      e.preventDefault();
-
-      const videoId = cardBtn.dataset.videoId;
-      const player = cardBtn.querySelector(".clipCard__player");
-      const iframe = cardBtn.querySelector(".clipCard__iframe");
-
-      if (!videoId || !player || !iframe) return;
-
-      // 모바일 autoplay 안전장치: mute=1 필수급
-      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playsinline=1&rel=0`;
-
-      player.classList.remove("hidden");
-      cardBtn.classList.add("is-playing");
-      return;
+    const a = e.target.closest("[data-cta]");
+    if (a) {
+      sendEvent({
+        event: "cta_click",
+        targetType: "cta",
+        targetId: a.dataset.cta || "unknown",
+        cardId: a.dataset.card || "default",
+      });
     }
   });
+
+  const flushOnExit = () => {
+    if (didFlush) return;
+    didFlush = true;
+
+    const now = Date.now();
+
+    // 마지막 탭 체류시간
+    const dur = now - tabStart;
+    if (dur > 300) sendEvent({ event: "tab_dwell", tab: activeTab, durationMs: dur });
+
+    // 세션 총 시간
+    const total = now - sessionStart;
+    if (total > 300) sendEvent({ event: "session_end", durationMs: total });
+  };
+
+  window.addEventListener("pagehide", flushOnExit);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") flushOnExit();
+  });
+  window.addEventListener("beforeunload", flushOnExit);
 })();
