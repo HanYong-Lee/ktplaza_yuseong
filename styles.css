@@ -25,7 +25,7 @@ html,body{ margin:0; padding:0; }
 body{
   font-family: ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
-  background: linear-gradient(180deg, #06142B 0%, #0B1B3B 24%, #0B1B3B 24%, #F6F8FF 90%);
+  background: linear-gradient(180deg, #0B1B3B 0%, #0A1A36 100%);
   overscroll-behavior: none;
 }
 
