@@ -219,17 +219,17 @@ a{ color: inherit; }
   position: absolute;
   left: 12px;
   right: 12px;
-  bottom: 12px;
+  bottom: 8px;
   
   padding: 10px 12px;
-  border-radius: 14px;
+  border-radius: 18px;
   font-size: 12px;
   color: rgba(10,18,36,.65);
-  background: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.66);
   backdrop-filter: blur(6px);
-  box-shadow: 0 10px 24px rgba(0,0,0, .18);
+  box-shadow: 0 10px 24px rgba(0,0,0, .42);
 }
-.heroCard__trust{ display:block; margin-top: 4px; font-weight: 900; color: rgba(10,18,36,.72); }
+.heroCard__trust{ display:block; font-weight: 900; color: rgba(10,18,36,.72); }
 
 /* hero intro animation */
 .heroIntro{
