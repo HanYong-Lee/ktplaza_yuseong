@@ -220,7 +220,7 @@ a{ color: inherit; }
   color: rgba(10,18,36,.65);
   background: rgba(255,255,255,.92);
 }
-.heroCard__trust{ display:block; margin-top: 4px; font-weight: 900; color: rgba(10,18,36,.72); }
+.heroCard__trust{ display:inline-block; transform: translateY(-8px); margin-top: 4px; font-weight: 900; color: rgba(10,18,36,.72); }
 
 /* hero intro animation */
 .heroIntro{
