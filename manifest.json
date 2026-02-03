@@ -2,7 +2,7 @@
   "name": "KT플라자 유성점",
   "short_name": "KT플라자 유성점",
   "lang": "ko-KR",
-  "start_url": "./?scr=wizet",
+  "start_url": "./?src=wizet",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#25a25a",
